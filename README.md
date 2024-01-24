@@ -44,6 +44,11 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+You must install docker and run the container for the database
+```bash
+# development
+$ docker compose up --build
+```
 
 ## Test
 
