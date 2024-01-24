@@ -10,6 +10,8 @@ import { ConductorModule } from 'src/conductor/conductor.module';
 import { Conductor } from 'src/database/entities/conductor.entity';
 import { Dia } from 'src/database/entities/dia.entity';
 import { DiaModule } from 'src/dia/dia.module';
+import { PuntosModule } from 'src/puntos/puntos.module';
+import { Puntos } from 'src/database/entities/puntos.entity';
 
 @Module({
   imports: [
@@ -20,13 +22,14 @@ import { DiaModule } from 'src/dia/dia.module';
       username: 'root',
       password: 'password',
       database: 'predicacion',
-      entities: [Grupo, Publicador, Conductor, Dia],
+      entities: [Grupo, Publicador, Conductor, Dia, Puntos],
       synchronize: true,
     }),
     GrupoModule,
     PublicadorModule,
     ConductorModule,
     DiaModule,
+    PuntosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
