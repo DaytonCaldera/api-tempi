@@ -1,0 +1,31 @@
+version: "3.9"  # Specify Docker Compose version
+
+services:
+  # nestjs-app:
+  #   build: .  # Build the NestJS image
+  #   ports:
+  #     - "3000:3000"  # Map port 3000 to host
+  #   depends_on:
+  #     - mysql  # Ensure MySQL starts first
+  #   environment:
+  #     DATABASE_URL: mysql://root:password@mysql:3306/predicacion
+  #   volumes:
+  #     - .:/app
+  #   expose:
+  #     - '3000'
+
+  mysql:
+    image: mysql:8.0  # Use MySQL 8.0 image
+    environment:
+      MYSQL_ROOT_PASSWORD: password  # Set root password
+      MYSQL_DATABASE: predicacion  # Create the database
+    ports:
+      - "3306:3306"  # Map port 3306 to host
+    volumes:
+      - mysql-data:/var/lib/mysql  # Persist database data
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+
+volumes:
+  mysql-data:  # Define a volume for MySQL data
