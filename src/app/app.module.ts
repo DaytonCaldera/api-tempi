@@ -14,6 +14,8 @@ import { PuntosModule } from 'src/puntos/puntos.module';
 import { Puntos } from 'src/database/entities/puntos.entity';
 import { TerritorioModule } from 'src/territorio/territorio.module';
 import { Territorio } from 'src/database/entities/territorio.entity';
+import { FraccionModule } from 'src/fraccion/fraccion.module';
+import { Fraccion } from 'src/database/entities/fraccion.entity';
 
 @Module({
   imports: [
@@ -24,7 +26,15 @@ import { Territorio } from 'src/database/entities/territorio.entity';
       username: 'root',
       password: 'password',
       database: 'predicacion',
-      entities: [Grupo, Publicador, Conductor, Dia, Puntos, Territorio],
+      entities: [
+        Grupo,
+        Publicador,
+        Conductor,
+        Dia,
+        Puntos,
+        Territorio,
+        Fraccion,
+      ],
       synchronize: true,
     }),
     GrupoModule,
@@ -33,6 +43,7 @@ import { Territorio } from 'src/database/entities/territorio.entity';
     DiaModule,
     PuntosModule,
     TerritorioModule,
+    FraccionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
