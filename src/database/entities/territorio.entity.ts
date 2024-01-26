@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { RegistroPredicacion } from './registro_predicacion.entity';
 
 @Entity()
 export class Territorio {
@@ -6,4 +7,6 @@ export class Territorio {
   id: number;
   @Column()
   nombre: string;
+  @OneToMany(() => RegistroPredicacion, (registro) => registro.territorio)
+  registro?: RegistroPredicacion;
 }

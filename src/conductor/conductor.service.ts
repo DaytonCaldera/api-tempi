@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Conductor as ConductorEntity } from 'src/database/entities/conductor.entity';
 import { Conductor } from './conductor.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateConductorDto } from 'src/database/dtos/conductor.dto';
 import { PublicadorService } from 'src/publicador/publicador.service';
 import { DiaService } from 'src/dia/dia.service';
@@ -23,6 +23,13 @@ export class ConductorService {
   async buscarConductor(id: number): Promise<Conductor> {
     return await this.conductorRepository.findOne({
       where: { id },
+      relations: ['publicador', 'dias'],
+    });
+  }
+
+  async buscarConductores(ids: number[]): Promise<Conductor[]> {
+    return await this.conductorRepository.find({
+      where: { id: In(ids) },
       relations: ['publicador', 'dias'],
     });
   }

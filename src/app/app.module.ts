@@ -16,6 +16,8 @@ import { TerritorioModule } from 'src/territorio/territorio.module';
 import { Territorio } from 'src/database/entities/territorio.entity';
 import { FraccionModule } from 'src/fraccion/fraccion.module';
 import { Fraccion } from 'src/database/entities/fraccion.entity';
+import { RegistroPredicacionModule } from 'src/registro-predicacion/registro-predicacion.module';
+import { RegistroPredicacion } from 'src/database/entities/registro_predicacion.entity';
 
 @Module({
   imports: [
@@ -34,6 +36,7 @@ import { Fraccion } from 'src/database/entities/fraccion.entity';
         Puntos,
         Territorio,
         Fraccion,
+        RegistroPredicacion,
       ],
       synchronize: true,
     }),
@@ -44,6 +47,7 @@ import { Fraccion } from 'src/database/entities/fraccion.entity';
     PuntosModule,
     TerritorioModule,
     FraccionModule,
+    RegistroPredicacionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

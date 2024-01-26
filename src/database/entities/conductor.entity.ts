@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Publicador } from './publicador.entity';
 import { Dia } from './dia.entity';
+import { RegistroPredicacion } from './registro_predicacion.entity';
 
 @Entity()
 export class Conductor {
@@ -21,4 +22,7 @@ export class Conductor {
   @ManyToMany(() => Dia)
   @JoinTable()
   dias: Dia[];
+  @ManyToMany(() => RegistroPredicacion)
+  @JoinTable()
+  registro?: RegistroPredicacion[];
 }
