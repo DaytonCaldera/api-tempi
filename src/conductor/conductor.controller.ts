@@ -4,11 +4,15 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { Conductor } from './conductor.interface';
 import { ConductorService } from './conductor.service';
-import { CreateConductorDto } from 'src/database/dtos/conductor.dto';
+import {
+  CreateConductorDto,
+  UpdateConductorDto,
+} from 'src/database/dtos/conductor.dto';
 
 @Controller('conductor')
 export class ConductorController {
@@ -24,9 +28,16 @@ export class ConductorController {
   }
 
   @Post()
-  async createPublicador(
+  async createConductor(
     @Body() conductorDto: CreateConductorDto,
   ): Promise<Conductor> {
     return this.conductorService.createConductor(conductorDto);
+  }
+
+  @Patch()
+  async updateConductor(
+    @Body() conductorDto: UpdateConductorDto,
+  ): Promise<Conductor> {
+    return this.conductorService.updateConductor(conductorDto);
   }
 }

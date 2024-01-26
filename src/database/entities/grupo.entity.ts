@@ -10,5 +10,5 @@ export class Grupo {
   nombre: string;
 
   @OneToMany(() => Publicador, (publicador) => publicador.grupo)
-  publicadores: Publicador[];
+  publicadores?: Publicador[];
 }

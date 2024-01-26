@@ -13,13 +13,13 @@ export class Publicador {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  id_grupo: number;
-  @Column()
   nombre: string;
   @Column()
   apellido1: string;
   @ManyToOne(() => Grupo, (grupo) => grupo.publicadores)
   grupo: Grupo;
-  @OneToOne(() => Conductor, (conductor) => conductor.publicador)
-  conductor: Conductor;
+  @OneToOne(() => Conductor, (conductor) => conductor.publicador, {
+    nullable: true,
+  })
+  conductor?: Conductor;
 }

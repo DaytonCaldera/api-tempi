@@ -1,9 +1,11 @@
+import { Conductor } from 'src/database/entities/conductor.entity';
 import { Grupo } from './../grupo/grupo.interface';
 export interface Publicador {
   id: number;
-  id_grupo: number;
   nombre: string;
   apellido1: string;
+  grupo: Grupo;
+  conductor?: Conductor;
 }
 
 export interface PublicadorGrupo extends Grupo, Publicador {}

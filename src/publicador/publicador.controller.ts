@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { PublicadorService } from './publicador.service';
 import { Publicador } from './publicador.interface';
+import { CreatePublicadorDto } from 'src/database/dtos/publicador.dto';
 
 @Controller('publicador')
 export class PublicadorController {
@@ -32,8 +33,9 @@ export class PublicadorController {
   }
 
   @Post()
-  async createPublicador(@Body() publicador: Publicador): Promise<Publicador> {
-    console.log('this is a post');
-    return this.publicadorService.createPublicador(publicador);
+  async createPublicador(
+    @Body() publicadorDto: CreatePublicadorDto,
+  ): Promise<Publicador> {
+    return this.publicadorService.createPublicador(publicadorDto);
   }
 }

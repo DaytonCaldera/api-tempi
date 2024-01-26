@@ -3,7 +3,10 @@ import { Conductor as ConductorEntity } from 'src/database/entities/conductor.en
 import { Conductor } from './conductor.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { CreateConductorDto } from 'src/database/dtos/conductor.dto';
+import {
+  CreateConductorDto,
+  UpdateConductorDto,
+} from 'src/database/dtos/conductor.dto';
 import { PublicadorService } from 'src/publicador/publicador.service';
 import { DiaService } from 'src/dia/dia.service';
 
@@ -17,7 +20,7 @@ export class ConductorService {
   ) {}
 
   obtenerConductores(): Promise<Conductor[]> {
-    return this.conductorRepository.find();
+    return this.conductorRepository.find({ relations: ['publicador'] });
   }
 
   async buscarConductor(id: number): Promise<Conductor> {
@@ -54,5 +57,21 @@ export class ConductorService {
     const savedConductor = await this.conductorRepository.save(newConductor);
 
     return savedConductor;
+  }
+
+  async updateConductor(conductorDto: UpdateConductorDto): Promise<Conductor> {
+    const conductor = await this.buscarConductor(conductorDto.id);
+    const publicador = await this.publicadorService.buscarPublicadorID(
+      conductorDto.publicadorId,
+    );
+    const diasEntities = await this.diaService.obtenerDiasIds(
+      conductorDto.dias,
+    );
+    console.log(diasEntities);
+
+    conductor.publicador = publicador;
+    conductor.dias = diasEntities;
+    const updatedConductor = await this.conductorRepository.save(conductor);
+    return updatedConductor;
   }
 }

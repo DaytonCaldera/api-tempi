@@ -11,6 +11,8 @@ import { PublicadorService } from 'src/publicador/publicador.service';
 import { Publicador } from 'src/database/entities/publicador.entity';
 import { DiaService } from 'src/dia/dia.service';
 import { Dia } from 'src/database/entities/dia.entity';
+import { Grupo } from 'src/database/entities/grupo.entity';
+import { GrupoService } from 'src/grupo/grupo.service';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { Dia } from 'src/database/entities/dia.entity';
       Territorio,
       Conductor,
       Publicador,
+      Grupo,
       Dia,
     ]),
   ],
@@ -29,6 +32,7 @@ import { Dia } from 'src/database/entities/dia.entity';
     ConductorService,
     PublicadorService,
     DiaService,
+    GrupoService,
   ],
 })
 export class RegistroPredicacionModule {}

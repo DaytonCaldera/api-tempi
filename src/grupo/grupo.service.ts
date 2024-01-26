@@ -23,11 +23,13 @@ export class GrupoService {
     return savedGrupo;
   }
 
-  async buscarGrupo(id: number): Promise<Grupo> {
-    const grupo = await this.grupoRepository.findOne({
+  async buscarGrupo(id: number, withRelations: boolean = true): Promise<Grupo> {
+    const options = {
       where: { id },
-      relations: ['publicadores'],
-    });
+      relations: [],
+    };
+    options.relations = withRelations ? ['publicadores'] : undefined;
+    const grupo = await this.grupoRepository.findOne(options);
     return grupo;
   }
 }
