@@ -18,6 +18,8 @@ import { FraccionModule } from 'src/fraccion/fraccion.module';
 import { Fraccion } from 'src/database/entities/fraccion.entity';
 import { RegistroPredicacionModule } from 'src/registro-predicacion/registro-predicacion.module';
 import { RegistroPredicacion } from 'src/database/entities/registro_predicacion.entity';
+import { PeriodoModule } from 'src/periodo/periodo.module';
+import { Periodo } from 'src/database/entities/periodo.entity';
 
 @Module({
   imports: [
@@ -36,6 +38,7 @@ import { RegistroPredicacion } from 'src/database/entities/registro_predicacion.
         Puntos,
         Territorio,
         Fraccion,
+        Periodo,
         RegistroPredicacion,
       ],
       synchronize: true,
@@ -47,6 +50,7 @@ import { RegistroPredicacion } from 'src/database/entities/registro_predicacion.
     PuntosModule,
     TerritorioModule,
     FraccionModule,
+    PeriodoModule,
     RegistroPredicacionModule,
   ],
   controllers: [AppController],
