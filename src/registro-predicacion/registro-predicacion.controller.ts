@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  NotImplementedException,
   Param,
   ParseIntPipe,
   Patch,
@@ -10,8 +9,10 @@ import {
 } from '@nestjs/common';
 import { RegistroPredicacionService } from './registro-predicacion.service';
 import { RegistroPredicacion } from './registro-predicacion.interface';
-import { CreateRegistroPredicacionDto } from 'src/database/dtos/registro_predicacion.dto';
-import { InsertResult } from 'typeorm';
+import {
+  CreateRegistroPredicacionDto,
+  UpdateRegistroPredicacionDto,
+} from 'src/database/dtos/registro_predicacion.dto';
 
 @Controller('registro')
 export class RegistroPredicacionController {
@@ -30,7 +31,7 @@ export class RegistroPredicacionController {
   @Post()
   guardarRegistro(
     @Body() registroDto: CreateRegistroPredicacionDto,
-  ): Promise<InsertResult> {
+  ): Promise<RegistroPredicacion> {
     try {
       return this.registroService.guardarRegistro(registroDto);
     } catch (error) {
@@ -40,7 +41,15 @@ export class RegistroPredicacionController {
     }
   }
   @Patch()
-  actualizarRegistro(): Promise<RegistroPredicacion> {
-    throw new NotImplementedException();
+  actualizarRegistro(
+    @Body() registroDto: UpdateRegistroPredicacionDto,
+  ): Promise<RegistroPredicacion> {
+    try {
+      return this.registroService.actualizarRegistro(registroDto);
+    } catch (error) {
+      console.log(error.code);
+
+      throw new Error(error);
+    }
   }
 }

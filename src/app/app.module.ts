@@ -44,6 +44,7 @@ import { AuthModule } from './auth/auth.module';
         RegistroPredicacion,
       ],
       synchronize: true,
+      logging: true,
     }),
     GrupoModule,
     PublicadorModule,
