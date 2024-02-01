@@ -21,6 +21,8 @@ import { RegistroPredicacion } from 'src/database/entities/registro_predicacion.
 import { PeriodoModule } from 'src/periodo/periodo.module';
 import { Periodo } from 'src/database/entities/periodo.entity';
 import { AuthModule } from './auth/auth.module';
+import { ProgramaPredicacionModule } from 'src/programa_predicacion/programa_predicacion.module';
+import { ProgramaPredicacion } from 'src/database/entities/programa_predicacion.entity';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { AuthModule } from './auth/auth.module';
       username: 'root',
       password: 'password',
       database: 'predicacion',
+      timezone: 'America/Costa_Rica',
       entities: [
         Grupo,
         Publicador,
@@ -42,6 +45,7 @@ import { AuthModule } from './auth/auth.module';
         Fraccion,
         Periodo,
         RegistroPredicacion,
+        ProgramaPredicacion,
       ],
       synchronize: true,
       logging: true,
@@ -55,6 +59,7 @@ import { AuthModule } from './auth/auth.module';
     FraccionModule,
     PeriodoModule,
     RegistroPredicacionModule,
+    ProgramaPredicacionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

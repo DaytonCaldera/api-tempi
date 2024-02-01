@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Fraccion as FraccionEntity } from 'src/database/entities/fraccion.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Fraccion } from './fraccion.interface';
 import { CreateFraccionDto } from 'src/database/dtos/fraccion.dto';
 import { TerritorioService } from 'src/territorio/territorio.service';
@@ -21,6 +21,12 @@ export class FraccionService {
   buscarFraccion(id: number): Promise<Fraccion> {
     return this.fraccionRepository.findOne({
       where: { id },
+      relations: ['territorio'],
+    });
+  }
+  buscarFracciones(ids: number[]): Promise<Fraccion[]> {
+    return this.fraccionRepository.find({
+      where: { id: In(ids) },
       relations: ['territorio'],
     });
   }
