@@ -12,6 +12,7 @@ import { Grupo } from './grupo.interface';
 @Controller('grupo')
 export class GrupoController {
   constructor(private readonly grupoService: GrupoService) {}
+
   @Get()
   async getAll(): Promise<Grupo[]> {
     return await this.grupoService.obtenerGrupos();

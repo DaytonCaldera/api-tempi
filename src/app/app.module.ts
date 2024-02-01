@@ -20,9 +20,11 @@ import { RegistroPredicacionModule } from 'src/registro-predicacion/registro-pre
 import { RegistroPredicacion } from 'src/database/entities/registro_predicacion.entity';
 import { PeriodoModule } from 'src/periodo/periodo.module';
 import { Periodo } from 'src/database/entities/periodo.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
