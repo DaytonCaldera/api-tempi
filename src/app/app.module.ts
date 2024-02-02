@@ -31,12 +31,12 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'password',
-      database: 'predicacion',
-      timezone: 'America/Costa_Rica',
+      host: process.env.DATABASE_HOST,
+      port: parseInt(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASS,
+      database: process.env.DATABASE_NAME,
+      timezone: process.env.DEFAULT_TIMEZONE,
       entities: [
         Grupo,
         Publicador,
