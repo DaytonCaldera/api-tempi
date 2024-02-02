@@ -23,9 +23,11 @@ import { Periodo } from 'src/database/entities/periodo.entity';
 import { AuthModule } from './auth/auth.module';
 import { ProgramaPredicacionModule } from 'src/programa_predicacion/programa_predicacion.module';
 import { ProgramaPredicacion } from 'src/database/entities/programa_predicacion.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
