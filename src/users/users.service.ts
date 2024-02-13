@@ -10,6 +10,7 @@ export class UsersService {
       id: 1,
       user: 'dayton',
       password: 'admin123',
+      nombre: 'daytiton',
     },
   ];
 

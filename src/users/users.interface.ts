@@ -2,4 +2,5 @@ export interface Users {
   id: number;
   user: string;
   password: string;
+  nombre: string;
 }
