@@ -7,10 +7,19 @@ import { jwtConstants } from './../../config/constants';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        JwtStrategy.extractJWTFromCookie,
+      ]),
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
     });
+  }
+
+  private static extractJWTFromCookie(req): string | null {
+    if (req.cookies && req.cookies.access_token) {
+      return req.cookies.access_token;
+    }
+    return null;
   }
 
   async validate(payload: any) {

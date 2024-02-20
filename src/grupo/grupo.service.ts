@@ -32,4 +32,8 @@ export class GrupoService {
     const grupo = await this.grupoRepository.findOne(options);
     return grupo;
   }
+
+  async deleteGrupo(id: number) {
+    return await this.grupoRepository.delete(id);
+  }
 }
