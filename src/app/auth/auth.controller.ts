@@ -2,24 +2,27 @@ import { Controller, Get, Post, Request, Res, UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from './guards/auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+// import { AppConfig } from '../config/constants';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async signIn(@Request() req, @Res({ passthrough: true }) res) {
-    const { access_token } = await this.authService.login(req.user);
-    res
-      .cookie('access_token', access_token, {
-        httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
-        expires: new Date(Date.now() + 5 * 60 * 1000),
-      })
-      .send({ status: 'ok' });
-    // return this.authService.login(req.user);
+  async signIn(@Request() req) {
+    // console.log(AppConfig.tokenExpireTime);
+
+    // const { access_token } = await this.authService.login(req.user);
+    // res
+    //   .cookie('token', access_token, {
+    //     httpOnly: true,
+    //     secure: true,
+    //     sameSite: 'strict',
+    //     expires: new Date(Date.now() + 5 * 60 * 1000),
+    //   })
+    //   .send({ status: 'ok' });
+    return this.authService.login(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -34,16 +37,9 @@ export class AuthController {
     return req.user;
   }
 
-  @UseGuards()
+  @UseGuards(JwtAuthGuard)
   @Post('logout')
-  async signOut(@Request() req, @Res({ passthrough: true }) res) {
-    res
-      .cookie('access_token', null, {
-        httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
-        expires: new Date(Date.now()),
-      })
-      .send({ status: 'ok' });
+  async signOut() {
+    return { status: 'ok' };
   }
 }
