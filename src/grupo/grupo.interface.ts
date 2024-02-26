@@ -4,6 +4,6 @@ export interface Grupo {
   id: number;
   nombre: string;
   publicadores?: Publicador[];
-  encargado?: string;
-  auxiliar?: string;
+  encargado?: Publicador;
+  auxiliar?: Publicador;
 }

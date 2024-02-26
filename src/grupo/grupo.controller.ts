@@ -5,12 +5,14 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import { GrupoService } from './grupo.service';
 import { Grupo } from './grupo.interface';
 import { JwtAuthGuard } from 'src/app/auth/guards/jwt-auth.guard';
+import { CreateGrupoDto, TablaGrupoDto, UpdateGrupoDto } from 'src/database/dtos/grupo.dto';
 
 @Controller('grupo')
 export class GrupoController {
@@ -19,7 +21,11 @@ export class GrupoController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async getAll(): Promise<Grupo[]> {
-    return await this.grupoService.obtenerGrupos();
+    return this.grupoService.obtenerGrupos();
+  }
+  @Get('tabla')
+  obtenerTablaGrupos(): Promise<TablaGrupoDto[]> {
+    return this.grupoService.obtenerTablaGrupos();
   }
 
   @Get(':id')
@@ -28,8 +34,13 @@ export class GrupoController {
   }
 
   @Post()
-  async createGrupo(@Body() grupo: Grupo): Promise<Grupo> {
-    return this.grupoService.createGrupo(grupo);
+  async createGrupo(@Body() grupoDto: CreateGrupoDto): Promise<Grupo> {
+    return this.grupoService.createGrupo(grupoDto);
+  }
+
+  @Patch()
+  async updateGrupo(@Body() grupoDto: UpdateGrupoDto): Promise<Grupo> {
+    return this.grupoService.updateGrupo(grupoDto);
   }
 
   @Delete(':id')

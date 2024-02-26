@@ -1,27 +1,14 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { GrupoController } from './grupo.controller';
 import { GrupoService } from './grupo.service';
-import { LoggerMiddleware } from 'src/app/middleware/logger/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Grupo } from '../database/entities/grupo.entity';
+import { Publicador } from 'src/database/entities/publicador.entity';
+import { PublicadorService } from 'src/publicador/publicador.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Grupo])],
+  imports: [TypeOrmModule.forFeature([Grupo, Publicador])],
   controllers: [GrupoController],
-  providers: [GrupoService],
+  providers: [GrupoService, PublicadorService],
 })
-export class GrupoModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware)
-      .forRoutes(
-        { path: 'grupo', method: RequestMethod.GET },
-        { path: 'grupo/buscar', method: RequestMethod.POST },
-      );
-  }
-}
+export class GrupoModule {}
