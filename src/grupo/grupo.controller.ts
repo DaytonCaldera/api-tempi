@@ -12,7 +12,11 @@ import {
 import { GrupoService } from './grupo.service';
 import { Grupo } from './grupo.interface';
 import { JwtAuthGuard } from 'src/app/auth/guards/jwt-auth.guard';
-import { CreateGrupoDto, TablaGrupoDto, UpdateGrupoDto } from 'src/database/dtos/grupo.dto';
+import {
+  CreateGrupoDto,
+  TablaGrupoDto,
+  UpdateGrupoDto,
+} from 'src/database/dtos/grupo.dto';
 
 @Controller('grupo')
 export class GrupoController {

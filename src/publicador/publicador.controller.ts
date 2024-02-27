@@ -1,20 +1,26 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { PublicadorService } from './publicador.service';
 import { Publicador } from './publicador.interface';
-import { CreatePublicadorDto } from 'src/database/dtos/publicador.dto';
+import {
+  CreatePublicadorDto,
+  TablaPublicadorDto,
+  UpdatePublicadorDto,
+} from 'src/database/dtos/publicador.dto';
 
 @Controller('publicador')
 export class PublicadorController {
-  constructor(private readonly publicadorService: PublicadorService) {}
+  constructor(private readonly publicadorService: PublicadorService) { }
   @Get()
   async getAll(): Promise<Publicador[]> {
     try {
@@ -27,6 +33,11 @@ export class PublicadorController {
     }
   }
 
+  @Get('/tabla')
+  async obtenerTablaPublicadores(): Promise<TablaPublicadorDto[]> {
+    return this.publicadorService.obtenerTablaPublicadores();
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.publicadorService.buscarPublicadorID(id);
@@ -37,5 +48,19 @@ export class PublicadorController {
     @Body() publicadorDto: CreatePublicadorDto,
   ): Promise<Publicador> {
     return this.publicadorService.createPublicador(publicadorDto);
+  }
+
+  @Patch()
+  async updatePublicador(
+    @Body() publicadorDto: UpdatePublicadorDto,
+  ): Promise<Publicador> {
+    return this.publicadorService.updatePublicador(publicadorDto);
+  }
+
+  @Delete(':id')
+  async eliminarPublicador(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<any> {
+    return this.publicadorService.deletePublicador(id);
   }
 }
