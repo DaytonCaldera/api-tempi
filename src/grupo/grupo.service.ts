@@ -48,16 +48,24 @@ export class GrupoService {
     return gruposDtos as TablaGrupoDto[];
   }
   async createGrupo(grupoDto: CreateGrupoDto): Promise<Grupo> {
+    const encargado = grupoDto.encargado
+      ? await this.buscarPublicadorID(grupoDto.encargado)
+      : null;
+    const auxiliar = grupoDto.auxiliar
+      ? await this.buscarPublicadorID(grupoDto.auxiliar)
+      : null;
     const createdGrupo = this.grupoRepository.create({
       nombre: grupoDto.nombre,
-      encargado: await this.buscarPublicadorID(grupoDto.encargado),
-      auxiliar: await this.buscarPublicadorID(grupoDto.auxiliar),
+      encargado: encargado ?? null,
+      auxiliar: auxiliar ?? null,
     });
     const savedGrupo = await this.grupoRepository.save(createdGrupo);
-    savedGrupo.encargado.nombre =
-      await `${savedGrupo.encargado?.nombre} ${savedGrupo.encargado?.apellido1}`;
-    savedGrupo.auxiliar.nombre =
-      await `${savedGrupo.auxiliar?.nombre} ${savedGrupo.auxiliar?.apellido1}`;
+    if (savedGrupo.encargado)
+      savedGrupo.encargado.nombre =
+        await `${savedGrupo.encargado?.nombre} ${savedGrupo.encargado?.apellido1}`;
+    if (savedGrupo.auxiliar)
+      savedGrupo.auxiliar.nombre =
+        await `${savedGrupo.auxiliar?.nombre} ${savedGrupo.auxiliar?.apellido1}`;
     return savedGrupo;
   }
 
