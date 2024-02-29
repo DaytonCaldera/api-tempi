@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { DiaService } from './dia.service';
 import { Dia } from './dia.interface';
 
@@ -14,5 +23,13 @@ export class DiaController {
   @Post()
   guardarDia(@Body() dia: Dia): Promise<Dia> {
     return this.diaService.guardarDia(dia);
+  }
+  @Patch()
+  actualizarDia(@Body() dia: Dia): Promise<Dia> {
+    return this.diaService.actualizarDia(dia);
+  }
+  @Delete(':id')
+  borrarDia(@Param('id', ParseIntPipe) id: number) {
+    return this.diaService.borrarDia(id);
   }
 }
