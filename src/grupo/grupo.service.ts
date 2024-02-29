@@ -18,7 +18,7 @@ export class GrupoService {
     private grupoRepository: Repository<GrupoEntity>,
     @InjectRepository(PublicadorEntity)
     private publicadorRepository: Repository<PublicadorEntity>,
-  ) { }
+  ) {}
   showMessage(message: string): string {
     return message;
   }
@@ -75,14 +75,23 @@ export class GrupoService {
 
   async updateGrupo(grupoDto: UpdateGrupoDto): Promise<Grupo> {
     const grupo = await this.buscarGrupo(grupoDto.id);
+    console.log(grupo);
     if (grupoDto.encargado)
       grupo.encargado = await this.buscarPublicadorID(grupoDto.encargado);
     if (grupoDto.auxiliar)
       grupo.auxiliar = await this.buscarPublicadorID(grupoDto.auxiliar);
     if (grupoDto.nombre) grupo.nombre = grupoDto.nombre;
     const savedGrupo = await this.grupoRepository.save(grupo);
-    savedGrupo.encargado.nombre = `${savedGrupo.encargado?.nombre} ${savedGrupo.encargado?.apellido1}`;
-    savedGrupo.auxiliar.nombre = `${savedGrupo.auxiliar?.nombre} ${savedGrupo.auxiliar?.apellido1}`;
+    if (savedGrupo?.encargado) {
+      savedGrupo.encargado.nombre =
+        `${savedGrupo.encargado?.nombre} ${savedGrupo.encargado?.apellido1}` ??
+        null;
+    }
+    if (savedGrupo?.auxiliar) {
+      savedGrupo.auxiliar.nombre =
+        `${savedGrupo.auxiliar?.nombre} ${savedGrupo.auxiliar?.apellido1}` ??
+        null;
+    }
     return savedGrupo;
   }
 
