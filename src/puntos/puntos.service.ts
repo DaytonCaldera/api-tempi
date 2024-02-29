@@ -1,9 +1,9 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Puntos as PuntosEntity } from 'src/database/entities/puntos.entity';
+import { Puntos as PuntosEntity } from 'src/puntos/entities/puntos.entity';
 import { Repository } from 'typeorm';
 import { Puntos } from './puntos.interface';
-import { CreatePuntoDto, UpdatePuntoDto } from 'src/database/dtos/puntos.dto';
+import { CreatePuntoDto, UpdatePuntoDto } from 'src/puntos/dtos/puntos.dto';
 import { DiaService } from 'src/dia/dia.service';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { PeriodoController } from './periodo.controller';
 import { PeriodoService } from './periodo.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Periodo } from 'src/database/entities/periodo.entity';
+import { Periodo } from 'src/periodo/entities/periodo.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Periodo])],

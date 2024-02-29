@@ -1,4 +1,4 @@
-import { Publicador as PublicadorEntity } from './../database/entities/publicador.entity';
+import { Publicador as PublicadorEntity } from './entities/publicador.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Publicador } from './publicador.interface';
 import { Injectable } from '@nestjs/common';
@@ -7,7 +7,7 @@ import {
   CreatePublicadorDto,
   TablaPublicadorDto,
   UpdatePublicadorDto,
-} from 'src/database/dtos/publicador.dto';
+} from 'src/publicador/dtos/publicador.dto';
 import { GrupoService } from 'src/grupo/grupo.service';
 
 @Injectable()

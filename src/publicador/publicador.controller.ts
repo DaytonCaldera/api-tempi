@@ -16,7 +16,7 @@ import {
   CreatePublicadorDto,
   TablaPublicadorDto,
   UpdatePublicadorDto,
-} from 'src/database/dtos/publicador.dto';
+} from 'src/publicador/dtos/publicador.dto';
 
 @Controller('publicador')
 export class PublicadorController {

@@ -12,7 +12,7 @@ import { RegistroPredicacion } from './registro-predicacion.interface';
 import {
   CreateRegistroPredicacionDto,
   UpdateRegistroPredicacionDto,
-} from 'src/database/dtos/registro_predicacion.dto';
+} from 'src/registro-predicacion/dtos/registro_predicacion.dto';
 
 @Controller('registro')
 export class RegistroPredicacionController {

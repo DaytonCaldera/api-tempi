@@ -1,9 +1,9 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Periodo as PeriodoEntity } from 'src/database/entities/periodo.entity';
+import { Periodo as PeriodoEntity } from 'src/periodo/entities/periodo.entity';
 import { Repository } from 'typeorm';
 import { Periodo } from './periodo.interface';
-import { CreatePeriodoDto } from 'src/database/dtos/periodo.dto';
+import { CreatePeriodoDto } from 'src/periodo/dtos/periodo.dto';
 
 @Injectable()
 export class PeriodoService {

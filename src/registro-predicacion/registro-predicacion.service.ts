@@ -4,13 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RegistroPredicacion as RegistroPredicacionEntity } from 'src/database/entities/registro_predicacion.entity';
+import { RegistroPredicacion as RegistroPredicacionEntity } from 'src/registro-predicacion/entities/registro_predicacion.entity';
 import { Repository } from 'typeorm';
 import { RegistroPredicacion } from './registro-predicacion.interface';
 import {
   CreateRegistroPredicacionDto,
   UpdateRegistroPredicacionDto,
-} from 'src/database/dtos/registro_predicacion.dto';
+} from 'src/registro-predicacion/dtos/registro_predicacion.dto';
 import { TerritorioService } from 'src/territorio/territorio.service';
 import { ConductorService } from 'src/conductor/conductor.service';
 

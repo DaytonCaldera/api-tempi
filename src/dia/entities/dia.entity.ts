@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
-import { Conductor } from './conductor.entity';
+import { Conductor } from '../../conductor/entities/conductor.entity';
 
 @Entity()
 export class Dia {

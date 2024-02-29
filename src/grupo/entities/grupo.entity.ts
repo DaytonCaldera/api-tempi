@@ -6,7 +6,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Publicador } from './publicador.entity';
+import { Publicador } from '../../publicador/entities/publicador.entity';
 
 @Entity()
 export class Grupo {

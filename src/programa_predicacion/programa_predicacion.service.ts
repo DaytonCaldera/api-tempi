@@ -1,12 +1,12 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProgramaPredicacion as ProgramaPredicacionEntity } from 'src/database/entities/programa_predicacion.entity';
+import { ProgramaPredicacion as ProgramaPredicacionEntity } from 'src/programa_predicacion/entities/programa_predicacion.entity';
 import { Repository } from 'typeorm';
 import { ProgramaPredicacion } from './programa_predicacion.interface';
 import {
   CreateProgramaPredicacionDto,
   UpdateProgramaPredicacionDto,
-} from 'src/database/dtos/programa_predicacion.dto';
+} from 'src/programa_predicacion/dtos/programa_predicacion.dto';
 import { ConductorService } from 'src/conductor/conductor.service';
 import { TerritorioService } from 'src/territorio/territorio.service';
 import { PuntosService } from 'src/puntos/puntos.service';

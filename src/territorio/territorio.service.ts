@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Territorio as TerritorioEntity } from 'src/database/entities/territorio.entity';
+import { Territorio as TerritorioEntity } from 'src/territorio/entities/territorio.entity';
 import { In, Repository } from 'typeorm';
 import { Territorio } from './territorio.interface';
 

@@ -2,17 +2,19 @@ import { Module } from '@nestjs/common';
 import { RegistroPredicacionController } from './registro-predicacion.controller';
 import { RegistroPredicacionService } from './registro-predicacion.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RegistroPredicacion } from 'src/database/entities/registro_predicacion.entity';
+import { RegistroPredicacion } from 'src/registro-predicacion/entities/registro_predicacion.entity';
 import { TerritorioService } from 'src/territorio/territorio.service';
-import { Territorio } from 'src/database/entities/territorio.entity';
+import { Territorio } from 'src/territorio/entities/territorio.entity';
 import { ConductorService } from 'src/conductor/conductor.service';
-import { Conductor } from 'src/database/entities/conductor.entity';
+import { Conductor } from 'src/conductor/entities/conductor.entity';
 import { PublicadorService } from 'src/publicador/publicador.service';
-import { Publicador } from 'src/database/entities/publicador.entity';
+import { Publicador } from 'src/publicador/entities/publicador.entity';
 import { DiaService } from 'src/dia/dia.service';
-import { Dia } from 'src/database/entities/dia.entity';
-import { Grupo } from 'src/database/entities/grupo.entity';
+import { Dia } from 'src/dia/entities/dia.entity';
+import { Grupo } from 'src/grupo/entities/grupo.entity';
 import { GrupoService } from 'src/grupo/grupo.service';
+import { Modalidad } from 'src/modalidad/entities/modalidad.entity';
+import { ModalidadService } from 'src/modalidad/modalidad.service';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { GrupoService } from 'src/grupo/grupo.service';
       Publicador,
       Grupo,
       Dia,
+      Modalidad,
     ]),
   ],
   controllers: [RegistroPredicacionController],
@@ -33,6 +36,7 @@ import { GrupoService } from 'src/grupo/grupo.service';
     PublicadorService,
     DiaService,
     GrupoService,
+    ModalidadService,
   ],
 })
 export class RegistroPredicacionModule {}

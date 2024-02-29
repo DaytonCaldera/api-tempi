@@ -6,8 +6,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Dia } from './dia.entity';
-import { Grupo } from './grupo.entity';
+import { Dia } from '../../dia/entities/dia.entity';
+import { Grupo } from '../../grupo/entities/grupo.entity';
 
 @Entity()
 export class Puntos {

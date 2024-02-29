@@ -5,8 +5,8 @@ import {
   ManyToOne,
   OneToOne,
 } from 'typeorm';
-import { Grupo } from './grupo.entity';
-import { Conductor } from './conductor.entity';
+import { Grupo } from '../../grupo/entities/grupo.entity';
+import { Conductor } from '../../conductor/entities/conductor.entity';
 
 @Entity()
 export class Publicador {

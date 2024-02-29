@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Dia as DiaEntity } from 'src/database/entities/dia.entity';
+import { Dia as DiaEntity } from 'src/dia/entities/dia.entity';
 import { In, Repository } from 'typeorm';
 import { Dia } from './dia.interface';
 

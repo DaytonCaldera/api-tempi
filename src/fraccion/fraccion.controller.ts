@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { FraccionService } from './fraccion.service';
 import { Fraccion } from './fraccion.interface';
-import { CreateFraccionDto } from 'src/database/dtos/fraccion.dto';
+import { CreateFraccionDto } from 'src/fraccion/dtos/fraccion.dto';
 
 @Controller('fraccion')
 export class FraccionController {

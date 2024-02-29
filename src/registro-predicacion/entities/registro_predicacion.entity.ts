@@ -7,8 +7,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Conductor } from './conductor.entity';
-import { Territorio } from './territorio.entity';
+import { Conductor } from '../../conductor/entities/conductor.entity';
+import { Territorio } from '../../territorio/entities/territorio.entity';
 
 @Entity()
 export class RegistroPredicacion {

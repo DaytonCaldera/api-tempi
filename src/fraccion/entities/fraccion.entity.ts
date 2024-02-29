@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
 } from 'typeorm';
-import { Territorio } from './territorio.entity';
+import { Territorio } from '../../territorio/entities/territorio.entity';
 
 @Entity()
 export class Fraccion {

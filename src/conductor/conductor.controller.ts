@@ -1,6 +1,8 @@
+import { TablaConductorDto } from './dtos/conductor.dto';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -12,7 +14,7 @@ import { ConductorService } from './conductor.service';
 import {
   CreateConductorDto,
   UpdateConductorDto,
-} from 'src/database/dtos/conductor.dto';
+} from 'src/conductor/dtos/conductor.dto';
 
 @Controller('conductor')
 export class ConductorController {
@@ -20,6 +22,11 @@ export class ConductorController {
   @Get()
   obtenerConductores(): Promise<Conductor[]> {
     return this.conductorService.obtenerConductores();
+  }
+
+  @Get('/tabla')
+  obtenerTablaConductores(): Promise<TablaConductorDto[]> {
+    return this.conductorService.obtenerTablaConductores();
   }
 
   @Get(':id')
@@ -39,5 +46,10 @@ export class ConductorController {
     @Body() conductorDto: UpdateConductorDto,
   ): Promise<Conductor> {
     return this.conductorService.updateConductor(conductorDto);
+  }
+
+  @Delete(':id')
+  deleteConductor(@Param('id', ParseIntPipe) id: number) {
+    return this.conductorService.deleteConductor(id);
   }
 }

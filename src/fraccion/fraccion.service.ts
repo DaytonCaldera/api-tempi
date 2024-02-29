@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Fraccion as FraccionEntity } from 'src/database/entities/fraccion.entity';
+import { Fraccion as FraccionEntity } from 'src/fraccion/entities/fraccion.entity';
 import { In, Repository } from 'typeorm';
 import { Fraccion } from './fraccion.interface';
-import { CreateFraccionDto } from 'src/database/dtos/fraccion.dto';
+import { CreateFraccionDto } from 'src/fraccion/dtos/fraccion.dto';
 import { TerritorioService } from 'src/territorio/territorio.service';
 
 @Injectable()

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { PeriodoService } from './periodo.service';
 import { Periodo } from './periodo.interface';
-import { CreatePeriodoDto } from 'src/database/dtos/periodo.dto';
+import { CreatePeriodoDto } from 'src/periodo/dtos/periodo.dto';
 
 @Controller('periodo')
 export class PeriodoController {

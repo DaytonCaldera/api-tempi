@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { PuntosService } from './puntos.service';
 import { Puntos } from './puntos.interface';
-import { CreatePuntoDto, UpdatePuntoDto } from 'src/database/dtos/puntos.dto';
+import { CreatePuntoDto, UpdatePuntoDto } from 'src/puntos/dtos/puntos.dto';
 
 @Controller('puntos')
 export class PuntosController {

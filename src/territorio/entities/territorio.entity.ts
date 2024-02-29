@@ -1,5 +1,5 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { RegistroPredicacion } from './registro_predicacion.entity';
+import { RegistroPredicacion } from '../../registro-predicacion/entities/registro_predicacion.entity';
 
 @Entity()
 export class Territorio {

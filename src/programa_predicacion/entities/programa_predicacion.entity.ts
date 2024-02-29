@@ -6,10 +6,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Puntos } from './puntos.entity';
-import { Conductor } from './conductor.entity';
-import { Territorio } from './territorio.entity';
-import { Fraccion } from './fraccion.entity';
+import { Puntos } from '../../puntos/entities/puntos.entity';
+import { Conductor } from '../../conductor/entities/conductor.entity';
+import { Territorio } from '../../territorio/entities/territorio.entity';
+import { Fraccion } from '../../fraccion/entities/fraccion.entity';
 
 @Entity()
 export class ProgramaPredicacion {

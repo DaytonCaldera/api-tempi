@@ -1,4 +1,4 @@
-import { Conductor } from 'src/database/entities/conductor.entity';
+import { Conductor } from 'src/conductor/entities/conductor.entity';
 import { Grupo } from './../grupo/grupo.interface';
 export interface Publicador {
   id: number;

@@ -16,7 +16,7 @@ import {
   CreateGrupoDto,
   TablaGrupoDto,
   UpdateGrupoDto,
-} from 'src/database/dtos/grupo.dto';
+} from 'src/grupo/dtos/grupo.dto';
 
 @Controller('grupo')
 export class GrupoController {

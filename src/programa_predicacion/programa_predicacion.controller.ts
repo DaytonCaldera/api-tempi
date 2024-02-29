@@ -10,7 +10,7 @@ import {
 import {
   CreateProgramaPredicacionDto,
   UpdateProgramaPredicacionDto,
-} from 'src/database/dtos/programa_predicacion.dto';
+} from 'src/programa_predicacion/dtos/programa_predicacion.dto';
 import { ProgramaPredicacionService } from './programa_predicacion.service';
 import { ProgramaPredicacion } from './programa_predicacion.interface';
 
