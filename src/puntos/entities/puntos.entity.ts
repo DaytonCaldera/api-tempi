@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToOne,
@@ -8,6 +9,7 @@ import {
 } from 'typeorm';
 import { Dia } from '../../dia/entities/dia.entity';
 import { Grupo } from '../../grupo/entities/grupo.entity';
+import { Territorio } from 'src/territorio/entities/territorio.entity';
 
 @Entity()
 export class Puntos {
@@ -19,5 +21,9 @@ export class Puntos {
   @JoinTable()
   dias: Dia[];
   @OneToOne(() => Grupo)
+  @JoinColumn()
   grupo?: Grupo;
+  @ManyToMany(() => Territorio)
+  @JoinTable()
+  territorios?: Territorio[];
 }

@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  NotImplementedException,
   Param,
   ParseIntPipe,
   Patch,
@@ -10,7 +9,10 @@ import {
 } from '@nestjs/common';
 import { FraccionService } from './fraccion.service';
 import { Fraccion } from './fraccion.interface';
-import { CreateFraccionDto } from 'src/fraccion/dtos/fraccion.dto';
+import {
+  CreateFraccionDto,
+  UpdateFraccionDto,
+} from 'src/fraccion/dtos/fraccion.dto';
 
 @Controller('fraccion')
 export class FraccionController {
@@ -29,7 +31,9 @@ export class FraccionController {
     return this.fraccionService.guardarFraccion(fraccionDto);
   }
   @Patch()
-  actualizarFraccion(): Promise<Fraccion> {
-    throw new NotImplementedException();
+  actualizarFraccion(
+    @Body() fraccionDto: UpdateFraccionDto,
+  ): Promise<Fraccion> {
+    return this.fraccionService.actualizarFraccion(fraccionDto);
   }
 }

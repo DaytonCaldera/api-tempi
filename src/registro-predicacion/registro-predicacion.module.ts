@@ -15,6 +15,7 @@ import { Grupo } from 'src/grupo/entities/grupo.entity';
 import { GrupoService } from 'src/grupo/grupo.service';
 import { Modalidad } from 'src/modalidad/entities/modalidad.entity';
 import { ModalidadService } from 'src/modalidad/modalidad.service';
+import { Fraccion } from 'src/fraccion/entities/fraccion.entity';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ModalidadService } from 'src/modalidad/modalidad.service';
       Grupo,
       Dia,
       Modalidad,
+      Fraccion,
     ]),
   ],
   controllers: [RegistroPredicacionController],

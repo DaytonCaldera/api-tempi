@@ -20,4 +20,6 @@ export class Fraccion {
   programado?: Date;
   @Column({ nullable: true })
   notas?: string;
+  @Column({ nullable: true })
+  mapa?: string;
 }

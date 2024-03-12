@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -9,7 +10,11 @@ import {
 } from '@nestjs/common';
 import { PuntosService } from './puntos.service';
 import { Puntos } from './puntos.interface';
-import { CreatePuntoDto, UpdatePuntoDto } from 'src/puntos/dtos/puntos.dto';
+import {
+  CreatePuntoDto,
+  TablaPuntosDto,
+  UpdatePuntoDto,
+} from 'src/puntos/dtos/puntos.dto';
 
 @Controller('puntos')
 export class PuntosController {
@@ -17,6 +22,10 @@ export class PuntosController {
   @Get()
   obtenerPuntos(): Promise<Puntos[]> {
     return this.puntosService.obtenerPuntos();
+  }
+  @Get('/tabla')
+  async obtenerTablaTerritorios(): Promise<TablaPuntosDto[]> {
+    return this.puntosService.obtenerTablaTerritorios();
   }
   @Get(':id')
   buscarPunto(@Param('id', ParseIntPipe) id: number): Promise<Puntos> {
@@ -29,5 +38,9 @@ export class PuntosController {
   @Patch()
   actualizarPunto(@Body() puntoDto: UpdatePuntoDto): Promise<Puntos> {
     return this.puntosService.actualizarPunto(puntoDto);
+  }
+  @Delete()
+  eliminarPunto(@Param('id', ParseIntPipe) id: number) {
+    return this.puntosService.eliminarPunto(id);
   }
 }

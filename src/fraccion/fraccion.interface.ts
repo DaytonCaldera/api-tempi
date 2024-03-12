@@ -6,4 +6,5 @@ export interface Fraccion {
   iniciado: Date;
   programado?: Date;
   notas?: string;
+  mapa?: string;
 }
