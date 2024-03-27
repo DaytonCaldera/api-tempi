@@ -28,4 +28,13 @@ export class PeriodoService {
   actualizarPeriodo() {
     throw new NotImplementedException();
   }
+  async eliminarPeriodo(id: number) {
+    const deletedPeriodo = await this.periodoRepository.delete(id);
+    return deletedPeriodo;
+  }
+  async obtenerMaximoPeriodo() {
+    const queryBuilder = this.periodoRepository.createQueryBuilder('Periodo');
+    const result = await queryBuilder.orderBy('id', 'DESC').limit(1).getOne();
+    return result;
+  }
 }

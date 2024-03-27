@@ -4,11 +4,13 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Conductor } from '../../conductor/entities/conductor.entity';
 import { Territorio } from '../../territorio/entities/territorio.entity';
+import { Periodo } from 'src/periodo/entities/periodo.entity';
 
 @Entity()
 export class RegistroPredicacion {
@@ -25,9 +27,12 @@ export class RegistroPredicacion {
   programado?: Date;
   @Column({ nullable: true })
   dias?: number;
-  @Column({ nullable: true })
-  periodo?: number;
-  @ManyToMany(() => Conductor, { cascade: ['insert'] })
+  @ManyToOne(() => Periodo)
+  @JoinColumn()
+  periodo?: Periodo;
+  @ManyToMany(() => Conductor, (conductor) => conductor.registro, {
+    eager: true,
+  })
   @JoinTable()
   asignados: Conductor[];
 }

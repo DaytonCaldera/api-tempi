@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotImplementedException,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -30,5 +32,9 @@ export class PeriodoController {
   @Patch()
   actualizarPeriodos(): Promise<Periodo> {
     throw new NotImplementedException();
+  }
+  @Delete(':id')
+  eliminarPeriodo(@Param('id', ParseIntPipe) id: number) {
+    return this.periodoService.eliminarPeriodo(id);
   }
 }

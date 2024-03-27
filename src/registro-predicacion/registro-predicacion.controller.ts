@@ -22,6 +22,10 @@ export class RegistroPredicacionController {
   obtenerRegistros(): Promise<RegistroPredicacion[]> {
     return this.registroService.obtenerRegistros();
   }
+  @Get('/tabla')
+  obtenerRegistroTabla(): Promise<RegistroPredicacion[]> {
+    return this.registroService.obtenerRegistroTabla();
+  }
   @Get(':id')
   buscarRegistro(
     @Param('id', ParseIntPipe) id: number,
