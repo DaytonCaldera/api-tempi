@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import {
   CreateProgramaPredicacionDto,
+  GenerarProgramDto,
   UpdateProgramaPredicacionDto,
 } from 'src/programa_predicacion/dtos/programa_predicacion.dto';
 import { ProgramaPredicacionService } from './programa_predicacion.service';
@@ -20,6 +21,14 @@ export class ProgramaPredicacionController {
   @Get()
   obtenerPrograma(): Promise<ProgramaPredicacion[]> {
     return this.programaService.obtenerPrograma();
+  }
+
+  @Get('/generar')
+  generarProgramaEntreFechas(
+    @Body() fechasProgramasDto: GenerarProgramDto,
+  ): Promise<any> {
+    console.log(fechasProgramasDto);
+    return null;
   }
 
   @Get(':id')
