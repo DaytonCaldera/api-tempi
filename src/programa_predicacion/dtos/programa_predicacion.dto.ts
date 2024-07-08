@@ -14,3 +14,8 @@ export class UpdateProgramaPredicacionDto {
   territorio?: number[];
   fraccion?: number[];
 }
+
+export class GenerarProgramDto {
+  fecha_inicio: Date;
+  fecha_final: Date;
+}

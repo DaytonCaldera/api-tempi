@@ -26,6 +26,10 @@ import { ProgramaPredicacionModule } from 'src/programa_predicacion/programa_pre
 import { ProgramaPredicacion } from 'src/programa_predicacion/entities/programa_predicacion.entity';
 import { Modalidad } from 'src/modalidad/entities/modalidad.entity';
 import { ModalidaModule } from 'src/modalidad/modalidad.module';
+import { ConfiguracionModule } from 'src/configuracion/configuracion.module';
+import { Configuracion } from 'src/configuracion/entities/configuracion.entity';
+import { Horario } from 'src/horario/entities/horario.entity';
+import { HorarioModule } from 'src/horario/horario.module';
 
 @Module({
   imports: [
@@ -43,6 +47,8 @@ import { ModalidaModule } from 'src/modalidad/modalidad.module';
       database: process.env.DATABASE_NAME,
       timezone: process.env.DEFAULT_TIMEZONE,
       entities: [
+        Configuracion,
+        Horario,
         Grupo,
         Publicador,
         Conductor,
@@ -58,6 +64,8 @@ import { ModalidaModule } from 'src/modalidad/modalidad.module';
       synchronize: true,
       logging: true,
     }),
+    ConfiguracionModule,
+    HorarioModule,
     GrupoModule,
     PublicadorModule,
     ConductorModule,
