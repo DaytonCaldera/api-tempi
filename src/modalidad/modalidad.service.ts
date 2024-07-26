@@ -18,6 +18,13 @@ export class ModalidadService {
   obtenerModalidadesIds(ids: number[]): Promise<Modalidad[]> {
     return this.modalidaRepository.findBy({ id: In(ids) });
   }
+  obtenerModalidad(id: number): Promise<Modalidad> {
+    const modalidad = this.modalidaRepository.findOneBy({ id });
+    if (!modalidad) {
+      throw new NotFoundException(`Modalidad con id ${id} no encontrada`);
+    }
+    return modalidad;
+  }
   async guardarModalidad(modalidad: CreateModalidadDto): Promise<Modalidad> {
     const createdModalidad = this.modalidaRepository.create({
       modalidad: modalidad.modalidad,

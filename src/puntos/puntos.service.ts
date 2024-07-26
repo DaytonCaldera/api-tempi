@@ -11,6 +11,7 @@ import {
 import { DiaService } from 'src/dia/dia.service';
 import { Territorio as TerritorioEntity } from 'src/territorio/entities/territorio.entity';
 import { Territorio } from 'src/territorio/territorio.interface';
+import { FraccionService } from 'src/fraccion/fraccion.service';
 
 @Injectable()
 export class PuntosService {
@@ -20,6 +21,7 @@ export class PuntosService {
     private diaService: DiaService,
     @InjectRepository(TerritorioEntity)
     private territoriosRepository: Repository<TerritorioEntity>,
+    private fraccionService: FraccionService,
   ) {}
 
   obtenerPuntos(): Promise<Puntos[]> {
@@ -38,6 +40,20 @@ export class PuntosService {
     const puntos = await this.puntosRepository.find(options);
     return puntos;
   }
+
+  async buscarPuntoPorTerritorios(territorios: string[], fracciones: string[]) {
+    const territorios_fracciones =
+      await this.fraccionService.buscarIdsTerritorios(fracciones);
+    const queryBuilder =
+      await this.puntosRepository.createQueryBuilder('puntos');
+    queryBuilder.leftJoinAndSelect('puntos.territorios', 'territorios');
+    queryBuilder.where('territorios.id IN (:...territorios)', {
+      territorios: territorios.concat(territorios_fracciones),
+    });
+    const puntos = queryBuilder.getMany();
+    return puntos;
+  }
+
   async crearPunto(puntoDto: CreatePuntoDto): Promise<Puntos> {
     const { dias, nombre } = puntoDto;
     const diasEntities = await this.diaService.obtenerDiasIds(dias);
@@ -66,7 +82,12 @@ export class PuntosService {
   async eliminarPunto(id: number) {
     return this.puntosRepository.delete(id);
   }
-  async buscarTerritoriosIds(ids: number[]): Promise<Territorio[] | undefined> {
+  async buscarTerritoriosIds(
+    ids: number[],
+    fracciones: boolean = false,
+  ): Promise<Territorio[] | undefined> {
+    if (fracciones) {
+    }
     return await this.territoriosRepository.find({ where: { id: In(ids) } });
   }
 }

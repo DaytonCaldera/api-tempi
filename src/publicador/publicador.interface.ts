@@ -6,6 +6,7 @@ export interface Publicador {
   apellido1: string;
   grupo: Grupo;
   conductor?: Conductor;
+  nombreCompleto?: string;
 }
 
 export interface PublicadorGrupo extends Grupo, Publicador {}

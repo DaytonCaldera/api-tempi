@@ -15,3 +15,8 @@ export class UpdateFraccionDto {
   mapa?: string;
   mapa_file: Blob;
 }
+
+export class FraccionDrowdownDto {
+  id: number;
+  nombre: string;
+}

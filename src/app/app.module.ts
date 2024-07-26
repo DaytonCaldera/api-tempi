@@ -62,7 +62,7 @@ import { HorarioModule } from 'src/horario/horario.module';
         Modalidad,
       ],
       synchronize: true,
-      logging: true,
+      logging: false,
     }),
     ConfiguracionModule,
     HorarioModule,

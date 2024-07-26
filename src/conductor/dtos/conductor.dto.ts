@@ -22,3 +22,8 @@ export class TablaConductorDto {
   dias: Dia[];
   modalidad?: Modalidad[]; // 1 - presencial, 2 - videoconferencia
 }
+
+export class ComboConductor {
+  id: number;
+  label: string;
+}

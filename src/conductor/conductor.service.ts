@@ -4,6 +4,7 @@ import { Conductor } from './conductor.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import {
+  ComboConductor,
   CreateConductorDto,
   TablaConductorDto,
   UpdateConductorDto,
@@ -112,5 +113,60 @@ export class ConductorService {
     // conductor.modalidades = null;
     // await this.conductorRepository.save(conductor);
     return this.conductorRepository.delete(id);
+  }
+
+  async obtenerConductoresComboDisponibles(
+    fecha: string,
+  ): Promise<ComboConductor[]> {
+    const conductoresDisponibles =
+      await this.obtenerConductoresDisponibles(fecha);
+    const comboConductores = conductoresDisponibles.map((conductor) => {
+      return {
+        id: conductor.id,
+        label: conductor.publicador.nombreCompleto,
+      };
+    });
+    return comboConductores as ComboConductor[];
+  }
+
+  async obtenerConductoresDisponibles(fecha: string): Promise<Conductor[]> {
+    const dia = await this.diaService.obtenerDiaPorFecha(fecha);
+    // Obtener conductores que no tienen días asignados (disponible todos los días).
+    const conductoresSinDiaAsignado =
+      await this.obtenerConductoresSinDiaAsignado();
+
+    if (!dia) {
+      // Si no se encuentra un día con ese nombre, retornamos solo los conductores sin día asignado.
+      return conductoresSinDiaAsignado;
+    }
+
+    // Obtener los conductores que tienen el día especificado asignado.
+    const conductoresConDiaAsignado =
+      await this.obtenerConductoresConDiaAsignado(dia.nombre);
+
+    const conductoresDisponibles = [
+      ...conductoresSinDiaAsignado,
+      ...conductoresConDiaAsignado,
+    ];
+
+    return conductoresDisponibles;
+  }
+
+  async obtenerConductoresSinDiaAsignado(): Promise<Conductor[]> {
+    return await this.conductorRepository
+      .createQueryBuilder('conductor')
+      .leftJoinAndSelect('conductor.publicador', 'publicador')
+      .leftJoinAndSelect('conductor.dias', 'dia')
+      .where('dia.id IS NULL')
+      .getMany();
+  }
+
+  async obtenerConductoresConDiaAsignado(dia: string): Promise<Conductor[]> {
+    return await this.conductorRepository
+      .createQueryBuilder('conductor')
+      .leftJoinAndSelect('conductor.dias', 'dia')
+      .leftJoinAndSelect('conductor.publicador', 'publicador')
+      .where('dia.nombre = :nombreDia', { nombreDia: dia })
+      .getMany();
   }
 }

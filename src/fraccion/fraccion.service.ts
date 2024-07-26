@@ -5,6 +5,7 @@ import { In, Repository } from 'typeorm';
 import { Fraccion } from './fraccion.interface';
 import {
   CreateFraccionDto,
+  FraccionDrowdownDto,
   UpdateFraccionDto,
 } from 'src/fraccion/dtos/fraccion.dto';
 import { TerritorioService } from 'src/territorio/territorio.service';
@@ -31,6 +32,26 @@ export class FraccionService {
     return this.fraccionRepository.find({
       where: { id: In(ids) },
       relations: ['territorio'],
+    });
+  }
+
+  async buscarIdsTerritorios(ids: string[]): Promise<string[]> {
+    const fracciones = await this.fraccionRepository.find({
+      relations: ['territorio'],
+      where: { id: In(ids) },
+    });
+    const territoriosIds = fracciones.map(
+      (fraccion) => `${fraccion.territorio.id}`,
+    );
+    return territoriosIds;
+  }
+
+  async obtenerDrowdownFracciones(): Promise<FraccionDrowdownDto[]> {
+    const fracciones = await this.fraccionRepository.find({
+      relations: ['territorio'],
+    });
+    return fracciones.map((f) => {
+      return { id: f.id, nombre: f.territorio.nombre + ' (fraccion)' };
     });
   }
 
