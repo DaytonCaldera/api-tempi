@@ -1,13 +1,15 @@
-import { TablaConductorDto } from './dtos/conductor.dto';
+import { ComboConductor, TablaConductorDto } from './dtos/conductor.dto';
 import {
   Body,
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { Conductor } from './conductor.interface';
 import { ConductorService } from './conductor.service';
@@ -27,6 +29,14 @@ export class ConductorController {
   @Get('/tabla')
   obtenerTablaConductores(): Promise<TablaConductorDto[]> {
     return this.conductorService.obtenerTablaConductores();
+  }
+
+  @Get('/programa')
+  obtenerConductoresDisponibles(
+    @Query('fecha') fecha: string,
+  ): Promise<ComboConductor[]> {
+    return this.conductorService.obtenerConductoresComboDisponibles(fecha);
+    throw new NotFoundException();
   }
 
   @Get(':id')

@@ -23,7 +23,6 @@ export class Territorio {
   @JoinColumn()
   fraccion?: Fraccion;
   @OneToOne(() => RegistroPredicacion, (registro) => registro.territorio)
-  @JoinColumn()
   registro?: RegistroPredicacion;
   @ManyToMany(() => Puntos)
   @JoinTable()

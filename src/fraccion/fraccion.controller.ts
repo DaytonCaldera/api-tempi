@@ -11,6 +11,7 @@ import { FraccionService } from './fraccion.service';
 import { Fraccion } from './fraccion.interface';
 import {
   CreateFraccionDto,
+  FraccionDrowdownDto,
   UpdateFraccionDto,
 } from 'src/fraccion/dtos/fraccion.dto';
 
@@ -21,6 +22,10 @@ export class FraccionController {
   @Get()
   obtenerFracciones(): Promise<Fraccion[]> {
     return this.fraccionService.obtenerFracciones();
+  }
+  @Get('/dropdown')
+  obtenerDrowdownFracciones(): Promise<FraccionDrowdownDto[]> {
+    return this.fraccionService.obtenerDrowdownFracciones();
   }
   @Get(':id')
   buscarFraccion(@Param('id', ParseIntPipe) id: number): Promise<Fraccion> {

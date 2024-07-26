@@ -1,15 +1,21 @@
+import { DeleteProgramaPredicacionDto } from './dtos/programa_predicacion.dto';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import {
+  BusquedaFechasDto,
   CreateProgramaPredicacionDto,
   GenerarProgramDto,
+  TablaProgramaDto,
   UpdateProgramaPredicacionDto,
 } from 'src/programa_predicacion/dtos/programa_predicacion.dto';
 import { ProgramaPredicacionService } from './programa_predicacion.service';
@@ -31,6 +37,16 @@ export class ProgramaPredicacionController {
     return null;
   }
 
+  @Get('/tabla')
+  obtenerProgramaTabla(
+    @Query('fecha_inicio') fecha_inicio?: Date,
+    @Query('fecha_final') fecha_final?: Date,
+    @Query('generar', new ParseBoolPipe({ optional: true })) generar?: boolean,
+  ): Promise<TablaProgramaDto[]> {
+    const fechasDto = new BusquedaFechasDto(fecha_inicio, fecha_final, generar);
+    return this.programaService.obtenerProgramaTabla(fechasDto);
+  }
+
   @Get(':id')
   buscarPrograma(
     @Param('id', ParseIntPipe) id: number,
@@ -50,5 +66,10 @@ export class ProgramaPredicacionController {
     @Body() programaDto: UpdateProgramaPredicacionDto,
   ): Promise<ProgramaPredicacion> {
     return this.programaService.actualizarPrograma(programaDto);
+  }
+
+  @Delete()
+  eliminarPrograma(@Body() programaDto: DeleteProgramaPredicacionDto) {
+    return this.programaService.eliminarPrograma(programaDto.id);
   }
 }

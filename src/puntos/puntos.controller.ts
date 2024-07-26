@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -7,6 +8,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { PuntosService } from './puntos.service';
 import { Puntos } from './puntos.interface';
@@ -26,6 +28,24 @@ export class PuntosController {
   @Get('/tabla')
   async obtenerTablaTerritorios(): Promise<TablaPuntosDto[]> {
     return this.puntosService.obtenerTablaTerritorios();
+  }
+  @Get('/territorio')
+  buscarPuntoPorTerritorios(
+    @Query('t') territorios?: string,
+    @Query('f') fracciones?: string,
+  ) {
+    if (!territorios && !fracciones)
+      throw new BadRequestException(
+        null,
+        'Faltan algunos parametros: {territorios, fracciones}',
+      );
+    const territoriosIds = territorios.split(',');
+    const fraccionesIds = fracciones.split(',');
+
+    return this.puntosService.buscarPuntoPorTerritorios(
+      territoriosIds,
+      fraccionesIds,
+    );
   }
   @Get(':id')
   buscarPunto(@Param('id', ParseIntPipe) id: number): Promise<Puntos> {
