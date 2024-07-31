@@ -1,23 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCongregacionDto } from './dto/create-congregacion.dto';
 import { UpdateCongregacionDto } from './dto/update-congregacion.dto';
+import { Repository } from 'typeorm';
+import { Congregacion as CongregacionEntity } from './entities/congregacion.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CongregacionService {
-  create(createCongregacionDto: CreateCongregacionDto) {
-    return 'This action adds a new congregacion';
+  constructor(
+    @InjectRepository(CongregacionEntity)
+    private congregacionRepository: Repository<CongregacionEntity>,
+  ) { }
+  async create(createCongregacionDto: CreateCongregacionDto) {
+    const nuevaCongregacion = this.congregacionRepository.create(
+      createCongregacionDto,
+    );
+    return await this.congregacionRepository.save(nuevaCongregacion);
   }
 
-  findAll() {
-    return `This action returns all congregacion`;
+  async findAll() {
+    return await this.congregacionRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} congregacion`;
+  async findOne(id: number) {
+    return await this.congregacionRepository.findOne({
+      where: { id: id },
+    });
   }
 
-  update(id: number, updateCongregacionDto: UpdateCongregacionDto) {
-    return `This action updates a #${id} congregacion`;
+  async update(id: number, updateCongregacionDto: UpdateCongregacionDto) {
+    const congregacion = await this.findOne(id);
+    if (!congregacion) {
+      throw new NotFoundException('Congregacion no encontrada');
+    }
+    congregacion.nombre = updateCongregacionDto.nombre;
+    return await this.congregacionRepository.save(congregacion);
   }
 
   remove(id: number) {

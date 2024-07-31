@@ -11,13 +11,23 @@ import { GrupoService } from 'src/grupo/grupo.service';
 import { Grupo } from 'src/grupo/entities/grupo.entity';
 import { Modalidad } from 'src/modalidad/entities/modalidad.entity';
 import { ModalidadService } from 'src/modalidad/modalidad.service';
+import { CongregacionService } from 'src/congregacion/congregacion.service';
+import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Conductor, Publicador, Dia, Grupo, Modalidad]),
+    TypeOrmModule.forFeature([
+      Conductor,
+      Publicador,
+      Dia,
+      Grupo,
+      Modalidad,
+      Congregacion,
+    ]),
   ],
   controllers: [ConductorController],
   providers: [
+    CongregacionService,
     ConductorService,
     PublicadorService,
     DiaService,

@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CongregacionService } from './congregacion.service';
 import { CreateCongregacionDto } from './dto/create-congregacion.dto';
 import { UpdateCongregacionDto } from './dto/update-congregacion.dto';
+import { JwtAuthGuard } from 'src/app/auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('congregacion')
 export class CongregacionController {
   constructor(private readonly congregacionService: CongregacionService) {}
@@ -20,9 +23,10 @@ export class CongregacionController {
     return this.congregacionService.create(createCongregacionDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.congregacionService.findAll();
+  async findAll() {
+    return await this.congregacionService.findAll();
   }
 
   @Get(':id')

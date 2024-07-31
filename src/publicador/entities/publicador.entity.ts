@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Grupo } from '../../grupo/entities/grupo.entity';
 import { Conductor } from '../../conductor/entities/conductor.entity';
+import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
 
 @Entity()
 export class Publicador {
@@ -34,4 +35,7 @@ export class Publicador {
     this.nombreCompleto = `${nombre} ${apellido1}`;
   }
   //SQL: UPDATE publicador SET nombreCompleto = CONCAT(nombre,' ',apellido1);
+
+  @ManyToOne(() => Congregacion)
+  congregacion: Congregacion;
 }

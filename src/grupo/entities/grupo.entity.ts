@@ -5,8 +5,10 @@ import {
   OneToMany,
   OneToOne,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Publicador } from '../../publicador/entities/publicador.entity';
+import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
 
 @Entity()
 export class Grupo {
@@ -15,6 +17,9 @@ export class Grupo {
 
   @Column()
   nombre: string;
+
+  @ManyToOne(() => Congregacion)
+  congregacion: Congregacion;
 
   @OneToMany(() => Publicador, (publicador) => publicador.grupo)
   publicadores?: Publicador[];

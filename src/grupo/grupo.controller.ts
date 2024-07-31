@@ -19,11 +19,11 @@ import {
 } from 'src/grupo/dtos/grupo.dto';
 
 @Controller('grupo')
+@UseGuards(JwtAuthGuard)
 export class GrupoController {
   constructor(private readonly grupoService: GrupoService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   async getAll(): Promise<Grupo[]> {
     return this.grupoService.obtenerGrupos();
   }

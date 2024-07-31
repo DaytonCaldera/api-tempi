@@ -11,6 +11,14 @@ export class UsersService {
       user: 'dayton',
       password: 'admin123',
       nombre: 'daytiton',
+      congregacion: 1,
+    },
+    {
+      id: 2,
+      user: 'will',
+      password: 'admin123',
+      nombre: 'Will antonio',
+      congregacion: 2,
     },
   ];
 
