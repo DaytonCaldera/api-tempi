@@ -1,5 +1,6 @@
 export class CreateGrupoDto {
   nombre: string;
+  congregacion: number;
   encargado?: number;
   auxiliar?: number;
 }
@@ -7,6 +8,7 @@ export class CreateGrupoDto {
 export class UpdateGrupoDto {
   id: number;
   nombre?: string;
+  congregacion?: number;
   encargado?: number;
   auxiliar?: number;
 }

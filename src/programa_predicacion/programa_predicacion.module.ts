@@ -19,10 +19,13 @@ import { Fraccion } from 'src/fraccion/entities/fraccion.entity';
 import { FraccionService } from 'src/fraccion/fraccion.service';
 import { Modalidad } from 'src/modalidad/entities/modalidad.entity';
 import { ModalidadService } from 'src/modalidad/modalidad.service';
+import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
+import { CongregacionService } from 'src/congregacion/congregacion.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Congregacion,
       ProgramaPredicacion,
       Puntos,
       Conductor,
@@ -36,6 +39,7 @@ import { ModalidadService } from 'src/modalidad/modalidad.service';
   ],
   controllers: [ProgramaPredicacionController],
   providers: [
+    CongregacionService,
     ProgramaPredicacionService,
     PuntosService,
     ConductorService,

@@ -2,7 +2,7 @@ import { Grupo as GrupoEntity } from './entities/grupo.entity';
 import { Injectable } from '@nestjs/common';
 import { Grupo } from './grupo.interface';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import {
   CreateGrupoDto,
   TablaGrupoDto,
@@ -10,26 +10,37 @@ import {
 } from 'src/grupo/dtos/grupo.dto';
 import { Publicador as PublicadorEntity } from 'src/publicador/entities/publicador.entity';
 import { Publicador } from 'src/publicador/publicador.interface';
+import { CongregacionService } from 'src/congregacion/congregacion.service';
+import { UserProperties } from 'src/users/users.interface';
 
 @Injectable()
 export class GrupoService {
+  private queryBuilder: SelectQueryBuilder<GrupoEntity>;
   constructor(
     @InjectRepository(GrupoEntity)
     private grupoRepository: Repository<GrupoEntity>,
     @InjectRepository(PublicadorEntity)
     private publicadorRepository: Repository<PublicadorEntity>,
-  ) {}
+    private congregacionService: CongregacionService,
+  ) {
+    this.queryBuilder = this.grupoRepository.createQueryBuilder('grupo');
+  }
   showMessage(message: string): string {
     return message;
   }
-  obtenerGrupos(): Promise<Grupo[]> {
-    return this.grupoRepository.find();
+  async obtenerGrupos(): Promise<Grupo[]> {
+    return await this.queryBuilder
+      .where('congregacionId = :cid', { cid: UserProperties.congregacion })
+      .getMany();
   }
   async obtenerTablaGrupos(): Promise<TablaGrupoDto[]> {
-    const options = {
-      relations: ['encargado', 'auxiliar'],
-    };
-    const grupos = await this.grupoRepository.find(options);
+    const queryBuilder = await this.grupoRepository.createQueryBuilder('grupo');
+    queryBuilder.where('grupo.congregacionId = :cid', {
+      cid: UserProperties?.congregacion,
+    });
+    queryBuilder.leftJoinAndSelect('grupo.encargado', 'encargado');
+    queryBuilder.leftJoinAndSelect('grupo.auxiliar', 'auxiliar');
+    const grupos = await queryBuilder.getMany();
     const gruposDtos = grupos.map(
       (g) =>
         ({
@@ -48,6 +59,9 @@ export class GrupoService {
     return gruposDtos as TablaGrupoDto[];
   }
   async createGrupo(grupoDto: CreateGrupoDto): Promise<Grupo> {
+    const congreacion = await this.congregacionService.findOne(
+      UserProperties.congregacion,
+    );
     const encargado = grupoDto.encargado
       ? await this.buscarPublicadorID(grupoDto.encargado)
       : null;
@@ -56,6 +70,7 @@ export class GrupoService {
       : null;
     const createdGrupo = this.grupoRepository.create({
       nombre: grupoDto.nombre,
+      congregacion: congreacion,
       encargado: encargado ?? null,
       auxiliar: auxiliar ?? null,
     });
@@ -70,20 +85,22 @@ export class GrupoService {
   }
 
   async buscarGrupo(id: number, withRelations: boolean = true): Promise<Grupo> {
-    const options = {
-      where: { id },
-      relations: [],
-    };
-    options.relations = withRelations
-      ? ['publicadores', 'encargado', 'auxiliar']
-      : undefined;
-    const grupo = await this.grupoRepository.findOne(options);
+    const queryBuilder = await this.grupoRepository.createQueryBuilder('grupo');
+    queryBuilder.where('grupo.id = :id AND congregacionId = :cid', {
+      id: id,
+      cid: UserProperties.congregacion,
+    });
+    if (withRelations) {
+      queryBuilder.leftJoinAndSelect('grupo.publicadores', 'publicadores');
+      queryBuilder.leftJoinAndSelect('grupo.encargado', 'encargado');
+      queryBuilder.leftJoinAndSelect('grupo.auxiliar', 'auxiliar');
+    }
+    const grupo = await queryBuilder.getOne();
     return grupo;
   }
 
   async updateGrupo(grupoDto: UpdateGrupoDto): Promise<Grupo> {
     const grupo = await this.buscarGrupo(grupoDto.id);
-    console.log(grupo);
     if (grupoDto.encargado)
       grupo.encargado = await this.buscarPublicadorID(grupoDto.encargado);
     if (grupoDto.auxiliar)
@@ -108,6 +125,12 @@ export class GrupoService {
   }
 
   async buscarPublicadorID(id: number): Promise<Publicador> {
-    return this.publicadorRepository.findOne({ where: { id } });
+    return this.publicadorRepository
+      .createQueryBuilder()
+      .where('id = :id AND congregacionId = :cid', {
+        id: id,
+        cid: UserProperties.congregacion,
+      })
+      .getOne();
   }
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -30,6 +30,10 @@ import { ConfiguracionModule } from 'src/configuracion/configuracion.module';
 import { Configuracion } from 'src/configuracion/entities/configuracion.entity';
 import { Horario } from 'src/horario/entities/horario.entity';
 import { HorarioModule } from 'src/horario/horario.module';
+import { CongregacionModule } from 'src/congregacion/congregacion.module';
+import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
+import { LoggerMiddleware } from './middleware/logger/logger.middleware';
+import { ClientIdMiddleware } from './middleware/clientid/clientid.middleware';
 
 @Module({
   imports: [
@@ -48,6 +52,7 @@ import { HorarioModule } from 'src/horario/horario.module';
       timezone: process.env.DEFAULT_TIMEZONE,
       entities: [
         Configuracion,
+        Congregacion,
         Horario,
         Grupo,
         Publicador,
@@ -65,6 +70,7 @@ import { HorarioModule } from 'src/horario/horario.module';
       logging: false,
     }),
     ConfiguracionModule,
+    CongregacionModule,
     HorarioModule,
     GrupoModule,
     PublicadorModule,
@@ -81,4 +87,9 @@ import { HorarioModule } from 'src/horario/horario.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ClientIdMiddleware).forRoutes('grupo', 'publicador');
+    // consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

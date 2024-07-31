@@ -44,7 +44,8 @@ export class ProgramaPredicacionService {
   ): Promise<TablaProgramaDto[]> {
     // 1. Retrieve registros based on fechasDto criteria
     const registros = await this.obtenerRegistros(fechasDto);
-
+    console.log(registros);
+    
     // 2. Check if generar flag is set and fechasDto has a range
     if (fechasDto?.generar && fechasDto?.hay_rango()) {
       // 2.1 Generate predicted program for the given date range
@@ -77,6 +78,8 @@ export class ProgramaPredicacionService {
   }
 
   mapearRegistroATablaProgramaDto(registro: any): TablaProgramaDto {
+    console.log(registro.conductor);
+
     return {
       id: registro.id,
       fecha: registro.fecha,
@@ -84,8 +87,8 @@ export class ProgramaPredicacionService {
       conductor_id: registro.conductor.id,
       punto: registro.punto.nombre,
       punto_id: registro.punto.id,
-      modalidad_id: registro.modalidad.id,
-      modalidad: registro.modalidad.nombre,
+      modalidad_id: registro?.modalidad?.id,
+      modalidad: registro?.modalidad?.nombre,
       territorios: [
         ...registro.fraccion.map(
           (f) =>

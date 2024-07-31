@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from './../../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { Users } from 'src/users/users.interface';
+import { Perfil, Users } from 'src/users/users.interface';
 
 @Injectable()
 export class AuthService {
@@ -20,10 +20,17 @@ export class AuthService {
     return null;
   }
 
+  async getUserProfile(username: string): Promise<Perfil> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...user } = await this.usersService.findOne(username);
+    return user as Perfil;
+  }
+
   async login(user: Users) {
     const payload = { username: user.user, sub: user.id };
+    const token = this.jwtService.sign(payload);
     return {
-      token: this.jwtService.sign(payload),
+      token: token,
     };
   }
 

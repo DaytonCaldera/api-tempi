@@ -1,32 +1,47 @@
+import { CongregacionService } from 'src/congregacion/congregacion.service';
 import { Publicador as PublicadorEntity } from './entities/publicador.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Publicador } from './publicador.interface';
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import {
   CreatePublicadorDto,
   TablaPublicadorDto,
   UpdatePublicadorDto,
 } from 'src/publicador/dtos/publicador.dto';
 import { GrupoService } from 'src/grupo/grupo.service';
+import { UserProperties } from 'src/users/users.interface';
 
 @Injectable()
 export class PublicadorService {
+  private queryBuilder: SelectQueryBuilder<PublicadorEntity>;
   constructor(
     @InjectRepository(PublicadorEntity)
     private publicadorRepository: Repository<PublicadorEntity>,
     private grupoService: GrupoService,
-  ) {}
+    private congregacionService: CongregacionService,
+  ) {
+    this.queryBuilder =
+      this.publicadorRepository.createQueryBuilder('publicador');
+  }
   obtenerPublicadores(): Promise<Publicador[] | undefined> {
-    return this.publicadorRepository.find();
+    return this.queryBuilder
+      .where('congregacionID = :cid', {
+        cid: UserProperties.congregacion,
+      })
+      .getMany();
   }
 
   async obtenerTablaPublicadores(): Promise<TablaPublicadorDto[]> {
-    const options = {
-      relations: ['grupo', 'conductor'],
-    };
-    const publicadores = await this.publicadorRepository.find(options);
-    const publicadoresDtos = publicadores.map((p) => {
+    const queryBuilder =
+      await this.publicadorRepository.createQueryBuilder('publicador');
+    queryBuilder.where('publicador.congregacionId = :cid', {
+      cid: UserProperties.congregacion,
+    });
+    queryBuilder.leftJoinAndSelect('publicador.grupo', 'grupo');
+    queryBuilder.leftJoinAndSelect('publicador.conductor', 'conductor');
+    const publicadores = await queryBuilder.getMany();
+    const publicadoresDtos = publicadores.map((p: any) => {
       const publicadorDto = new TablaPublicadorDto();
       publicadorDto.id = p.id;
       publicadorDto.nombre = p.nombre;
@@ -39,22 +54,28 @@ export class PublicadorService {
     return publicadoresDtos;
   }
 
-  buscarPublicadorID(id: number): Promise<Publicador | undefined> {
-    return this.publicadorRepository.findOne({
-      where: { id },
-      relations: ['grupo'],
-    });
+  async buscarPublicadorID(id: number): Promise<Publicador | undefined> {
+    return await this.queryBuilder
+      .where('id = :id AND congregacionID = :cid', {
+        id: id,
+        cid: UserProperties.congregacion,
+      })
+      .getOne();
   }
 
   async createPublicador(
     publicadorDto: CreatePublicadorDto,
   ): Promise<Publicador> {
     const { nombre, apellido1, grupo_id } = publicadorDto;
+    const congregacion = await this.congregacionService.findOne(
+      UserProperties.congregacion,
+    );
     const grupo = await this.grupoService.buscarGrupo(grupo_id, false);
     const createdPublicador = this.publicadorRepository.create({
       nombre: nombre,
       apellido1: apellido1,
       grupo: grupo,
+      congregacion: congregacion,
     });
     const savedPublicador =
       await this.publicadorRepository.save(createdPublicador);
@@ -77,6 +98,7 @@ export class PublicadorService {
     return savedGrupo;
   }
 
+  //TODO: Desactivar publicador, no borrarlo. Asi en el futuro no hay que volver a ingresar un dato y se deja en alguna papelera
   async deletePublicador(id: number) {
     return await this.publicadorRepository.delete(id);
   }

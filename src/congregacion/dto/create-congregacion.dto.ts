@@ -1,1 +1,3 @@
-export class CreateCongregacionDto {}
+export class CreateCongregacionDto {
+  nombre: string;
+}

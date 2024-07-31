@@ -18,10 +18,13 @@ import { ModalidadService } from 'src/modalidad/modalidad.service';
 import { Fraccion } from 'src/fraccion/entities/fraccion.entity';
 import { Periodo } from 'src/periodo/entities/periodo.entity';
 import { PeriodoService } from 'src/periodo/periodo.service';
+import { CongregacionService } from 'src/congregacion/congregacion.service';
+import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Congregacion,
       RegistroPredicacion,
       Territorio,
       Conductor,
@@ -35,6 +38,7 @@ import { PeriodoService } from 'src/periodo/periodo.service';
   ],
   controllers: [RegistroPredicacionController],
   providers: [
+    CongregacionService,
     RegistroPredicacionService,
     TerritorioService,
     ConductorService,
