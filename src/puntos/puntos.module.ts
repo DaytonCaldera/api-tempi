@@ -9,10 +9,20 @@ import { Territorio } from 'src/territorio/entities/territorio.entity';
 import { FraccionService } from 'src/fraccion/fraccion.service';
 import { Fraccion } from 'src/fraccion/entities/fraccion.entity';
 import { TerritorioService } from 'src/territorio/territorio.service';
+import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
+import { CongregacionService } from 'src/congregacion/congregacion.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Puntos, Dia, Territorio, Fraccion])],
+  imports: [
+    TypeOrmModule.forFeature([Puntos, Dia, Territorio, Fraccion, Congregacion]),
+  ],
   controllers: [PuntosController],
-  providers: [PuntosService, DiaService, FraccionService, TerritorioService],
+  providers: [
+    PuntosService,
+    DiaService,
+    FraccionService,
+    TerritorioService,
+    CongregacionService,
+  ],
 })
 export class PuntosModule {}

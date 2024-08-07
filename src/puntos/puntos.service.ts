@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Puntos as PuntosEntity } from 'src/puntos/entities/puntos.entity';
-import { In, Repository } from 'typeorm';
+import { In, Repository, SelectQueryBuilder } from 'typeorm';
 import { Puntos } from './puntos.interface';
 import {
   CreatePuntoDto,
@@ -12,6 +12,8 @@ import { DiaService } from 'src/dia/dia.service';
 import { Territorio as TerritorioEntity } from 'src/territorio/entities/territorio.entity';
 import { Territorio } from 'src/territorio/territorio.interface';
 import { FraccionService } from 'src/fraccion/fraccion.service';
+import { UserProperties } from 'src/users/users.interface';
+import { CongregacionService } from 'src/congregacion/congregacion.service';
 
 @Injectable()
 export class PuntosService {
@@ -22,23 +24,39 @@ export class PuntosService {
     @InjectRepository(TerritorioEntity)
     private territoriosRepository: Repository<TerritorioEntity>,
     private fraccionService: FraccionService,
+    private congregacionService: CongregacionService,
   ) {}
 
-  obtenerPuntos(): Promise<Puntos[]> {
-    return this.puntosRepository.find();
+  async createQueryBuilder(): Promise<SelectQueryBuilder<PuntosEntity>> {
+    return this.puntosRepository.createQueryBuilder('punto');
   }
-  buscarPunto(id: number): Promise<Puntos> {
-    return this.puntosRepository.findOne({
-      where: { id },
-      relations: ['dias'],
+
+  async obtenerPuntos(): Promise<Puntos[]> {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.where('punto.congregacion = :cid', {
+      cid: UserProperties.congregacion,
     });
+    return await queryBuilder.getMany();
+  }
+
+  async buscarPunto(id: number): Promise<Puntos> {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('punto.dias', 'dias');
+    queryBuilder.where('punto.id = :id AND punto.congregacion = :cid', {
+      id: id,
+      cid: UserProperties.congregacion,
+    });
+    return await queryBuilder.getOne();
   }
   async obtenerTablaTerritorios(): Promise<TablaPuntosDto[]> {
-    const options = {
-      relations: ['dias', 'grupo', 'territorios'],
-    };
-    const puntos = await this.puntosRepository.find(options);
-    return puntos;
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('punto.dias', 'dias');
+    queryBuilder.leftJoinAndSelect('punto.grupo', 'grupo');
+    queryBuilder.leftJoinAndSelect('punto.territorios', 'territorios');
+    queryBuilder.where('punto.congregacion = :cid', {
+      cid: UserProperties.congregacion,
+    });
+    return await queryBuilder.getMany();
   }
 
   async buscarPuntoPorTerritorios(territorios: string[], fracciones: string[]) {
@@ -60,6 +78,9 @@ export class PuntosService {
     const createdPunto = this.puntosRepository.create({
       nombre: nombre,
       dias: diasEntities,
+      congregacion: await this.congregacionService.findOne(
+        UserProperties.congregacion,
+      ),
     });
     const savedPunto = await this.puntosRepository.save(createdPunto);
     return savedPunto;

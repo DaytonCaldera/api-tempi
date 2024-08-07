@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Fraccion as FraccionEntity } from 'src/fraccion/entities/fraccion.entity';
-import { In, Repository } from 'typeorm';
+import { In, Repository, SelectQueryBuilder } from 'typeorm';
 import { Fraccion } from './fraccion.interface';
 import {
   CreateFraccionDto,
@@ -9,6 +9,7 @@ import {
   UpdateFraccionDto,
 } from 'src/fraccion/dtos/fraccion.dto';
 import { TerritorioService } from 'src/territorio/territorio.service';
+import { UserProperties } from 'src/users/users.interface';
 
 @Injectable()
 export class FraccionService {
@@ -18,28 +19,43 @@ export class FraccionService {
     private territorioService: TerritorioService,
   ) {}
 
-  obtenerFracciones(): Promise<Fraccion[]> {
-    return this.fraccionRepository.find();
+  async createQueryBuilder(): Promise<SelectQueryBuilder<FraccionEntity>> {
+    return this.fraccionRepository.createQueryBuilder('fraccion');
   }
 
-  buscarFraccion(id: number): Promise<Fraccion> {
-    return this.fraccionRepository.findOne({
-      where: { id },
-      relations: ['territorio'],
+  async obtenerFracciones(): Promise<Fraccion[]> {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('fraccion.territorio', 'territorio');
+    queryBuilder.where('territorio.congregacion = :cid', {
+      cid: UserProperties.congregacion,
     });
+    return await queryBuilder.getMany();
   }
-  buscarFracciones(ids: number[]): Promise<Fraccion[]> {
-    return this.fraccionRepository.find({
-      where: { id: In(ids) },
-      relations: ['territorio'],
+
+  async buscarFraccion(id: number): Promise<Fraccion> {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('fraccion.territorio', 'territorio');
+    queryBuilder.where('fraccion.id = :id AND territorio.congregacion = :cid', {
+      id: id,
+      cid: UserProperties.congregacion,
     });
+    return await queryBuilder.getOne();
+  }
+  async buscarFracciones(ids: number[] | string[]): Promise<Fraccion[]> {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('fraccion.territorio', 'territorio');
+    queryBuilder.where(
+      'fraccion.id IN(:ids) AND territorio.congregacion = :cid',
+      {
+        ids: ids,
+        cid: UserProperties.congregacion,
+      },
+    );
+    return await queryBuilder.getMany();
   }
 
   async buscarIdsTerritorios(ids: string[]): Promise<string[]> {
-    const fracciones = await this.fraccionRepository.find({
-      relations: ['territorio'],
-      where: { id: In(ids) },
-    });
+    const fracciones = await this.buscarFracciones(ids);
     const territoriosIds = fracciones.map(
       (fraccion) => `${fraccion.territorio.id}`,
     );
@@ -47,9 +63,7 @@ export class FraccionService {
   }
 
   async obtenerDrowdownFracciones(): Promise<FraccionDrowdownDto[]> {
-    const fracciones = await this.fraccionRepository.find({
-      relations: ['territorio'],
-    });
+    const fracciones = await this.obtenerFracciones();
     return fracciones.map((f) => {
       return { id: f.id, nombre: f.territorio.nombre + ' (fraccion)' };
     });

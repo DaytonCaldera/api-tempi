@@ -136,6 +136,7 @@ export class PublicadorService {
 
   async buscarConductores(ids?: number[]): Promise<Publicador[]> {
     const consulta = await this.obtenerConsultaConductores(ids);
+    console.log('AQUI', consulta.getQueryAndParameters());
     return consulta.getMany();
   }
   async buscarConductor(ids: number): Promise<Publicador> {
@@ -150,11 +151,14 @@ export class PublicadorService {
       'publicador.tareas',
       'tareas',
     );
-    queryBuilder.where('publicador.congregacionId = :cid', {
-      cid: UserProperties.congregacion,
-    });
+    queryBuilder.where(
+      'publicador.congregacionId = :cid AND tareas.nombre = "Conductor"',
+      {
+        cid: UserProperties.congregacion,
+      },
+    );
     if (ids != null) {
-      queryBuilder.where('tareas.nombre = "Conductor" AND ids IN(:ids)', {
+      queryBuilder.andWhere('ids IN(:ids)', {
         ids: ids,
       });
     }

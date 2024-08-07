@@ -1,7 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProgramaPredicacion as ProgramaPredicacionEntity } from 'src/programa_predicacion/entities/programa_predicacion.entity';
-import { Between, DeleteResult, IsNull, Not, Repository } from 'typeorm';
+import {
+  Between,
+  DeleteResult,
+  IsNull,
+  Not,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { ProgramaPredicacion } from './programa_predicacion.interface';
 import {
   BusquedaFechasDto,
@@ -15,6 +22,7 @@ import { PuntosService } from 'src/puntos/puntos.service';
 import { FraccionService } from 'src/fraccion/fraccion.service';
 import { ModalidadService } from 'src/modalidad/modalidad.service';
 import { PublicadorService } from 'src/publicador/publicador.service';
+import { UserProperties } from 'src/users/users.interface';
 
 @Injectable()
 export class ProgramaPredicacionService {
@@ -28,15 +36,31 @@ export class ProgramaPredicacionService {
     private modalidadService: ModalidadService,
   ) {}
 
-  obtenerPrograma(): Promise<ProgramaPredicacion[]> {
-    return this.programaRepository.find();
+  async createQueryBuilder(): Promise<
+    SelectQueryBuilder<ProgramaPredicacionEntity>
+  > {
+    return this.programaRepository.createQueryBuilder('programa');
   }
-  buscarPrograma(id: number): Promise<ProgramaPredicacion> {
-    return this.programaRepository.findOne({
-      where: { id },
-      relations: ['punto', 'territorio', 'conductor', 'fraccion'],
-      relationLoadStrategy: 'join',
+
+  async obtenerPrograma(): Promise<ProgramaPredicacion[]> {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('programa.territorio', 'territorio');
+    queryBuilder.where('territorio.congregacion = :cid', {
+      cid: UserProperties.congregacion,
     });
+    return await queryBuilder.getMany();
+  }
+  async buscarPrograma(id: number): Promise<ProgramaPredicacion> {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('programa.punto', 'punto');
+    queryBuilder.leftJoinAndSelect('programa.territorio', 'territorio');
+    queryBuilder.leftJoinAndSelect('programa.conductor', 'conductor');
+    queryBuilder.leftJoinAndSelect('programa.fraccion', 'fraccion');
+    queryBuilder.where('programa.id = :id AND programa.congregacion = :cid', {
+      id: id,
+      cid: UserProperties.congregacion,
+    });
+    return await queryBuilder.getOne();
   }
 
   async obtenerProgramaTabla(
@@ -61,19 +85,31 @@ export class ProgramaPredicacionService {
   }
 
   async obtenerRegistros(fechasDto?: BusquedaFechasDto): Promise<any[]> {
-    const options = {
-      relations: [
-        'conductor',
-        'territorio',
-        'fraccion.territorio',
-        'punto',
-        'modalidad',
-      ],
-      where: fechasDto?.hay_rango()
-        ? { fecha: Between(fechasDto.fecha_inicio, fechasDto.fecha_final) }
-        : { fecha: Not(IsNull()) },
-    };
-    return await this.programaRepository.find(options);
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('programa.punto', 'punto');
+    queryBuilder.leftJoinAndSelect('programa.territorio', 'territorio');
+    queryBuilder.leftJoinAndSelect('programa.conductor', 'conductor');
+    queryBuilder.leftJoinAndSelect('programa.fraccion', 'fraccion');
+    queryBuilder.leftJoinAndSelect(
+      'fraccion.territorio',
+      'fraccion_territorio',
+    );
+    queryBuilder.leftJoinAndSelect('programa.modalidad', 'modalidad');
+    queryBuilder.where(
+      'territorio.congregacion = :cid OR fraccion_territorio.congregacion = :cid',
+      {
+        cid: UserProperties.congregacion,
+      },
+    );
+    if (fechasDto.hay_rango()) {
+      queryBuilder.andWhere('programa.fecha BETWEEN :inicio AND :final', {
+        inicio: fechasDto.fecha_inicio,
+        final: fechasDto.fecha_final,
+      });
+    } else {
+      queryBuilder.andWhere('programa.fecha IS NOT NULL');
+    }
+    return await queryBuilder.getMany();
   }
 
   mapearRegistroATablaProgramaDto(registro: any): TablaProgramaDto {

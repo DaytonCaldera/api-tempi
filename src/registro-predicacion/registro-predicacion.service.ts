@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegistroPredicacion as RegistroPredicacionEntity } from 'src/registro-predicacion/entities/registro_predicacion.entity';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { RegistroPredicacion } from './registro-predicacion.interface';
 import {
   CreateRegistroPredicacionDto,
@@ -14,6 +14,7 @@ import {
 import { TerritorioService } from 'src/territorio/territorio.service';
 import { PeriodoService } from 'src/periodo/periodo.service';
 import { PublicadorService } from 'src/publicador/publicador.service';
+import { UserProperties } from 'src/users/users.interface';
 
 @Injectable()
 export class RegistroPredicacionService {
@@ -25,20 +26,41 @@ export class RegistroPredicacionService {
     private periodoService: PeriodoService,
   ) {}
 
-  obtenerRegistros(): Promise<RegistroPredicacion[]> {
-    return this.registroRepository.find();
-  }
-  obtenerRegistroTabla(): Promise<RegistroPredicacion[]> {
-    return this.registroRepository.find({
-      relations: ['territorio', 'asignados', 'periodo'],
-    });
+  async createQueryBuilder(): Promise<
+    SelectQueryBuilder<RegistroPredicacionEntity>
+  > {
+    return this.registroRepository.createQueryBuilder('registro');
   }
 
-  buscarRegistro(id: number): Promise<RegistroPredicacion> {
-    return this.registroRepository.findOne({
-      where: { id },
-      relations: ['asignados', 'territorio', 'periodo'],
+  async obtenerRegistros(): Promise<RegistroPredicacion[]> {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('registro.territorio', 'territorio');
+    queryBuilder.where('territorio.congregacion = :cid', {
+      cid: UserProperties.congregacion,
     });
+    return await queryBuilder.getMany();
+  }
+  async obtenerRegistroTabla(): Promise<RegistroPredicacion[]> {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('registro.territorio', 'territorio');
+    queryBuilder.leftJoinAndSelect('registro.asignados', 'asignados');
+    queryBuilder.leftJoinAndSelect('registro.periodo', 'periodo');
+    queryBuilder.where('territorio.congregacion = :cid', {
+      cid: UserProperties.congregacion,
+    });
+    return await queryBuilder.getMany();
+  }
+
+  async buscarRegistro(id: number): Promise<RegistroPredicacion> {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.leftJoinAndSelect('registro.territorio', 'territorio');
+    queryBuilder.leftJoinAndSelect('registro.asignados', 'asignados');
+    queryBuilder.leftJoinAndSelect('registro.periodo', 'periodo');
+    queryBuilder.where('registro.id = :id AND territorio.congregacion = :cid', {
+      id: id,
+      cid: UserProperties.congregacion,
+    });
+    return await queryBuilder.getOne();
   }
 
   async guardarRegistro(
