@@ -3,12 +3,10 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToOne,
   ManyToMany,
   JoinTable,
 } from 'typeorm';
 import { Grupo } from '../../grupo/entities/grupo.entity';
-import { Conductor } from '../../conductor/entities/conductor.entity';
 import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
 import { Tarea } from 'src/tareas/entities/tarea.entity';
 import { Dia } from 'src/dia/entities/dia.entity';

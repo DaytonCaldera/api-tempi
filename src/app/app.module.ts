@@ -92,7 +92,17 @@ import { TareasModule } from 'src/tareas/tareas.module';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ClientIdMiddleware).forRoutes('grupo', 'publicador');
+    consumer
+      .apply(ClientIdMiddleware)
+      .forRoutes(
+        'grupo',
+        'publicador',
+        'puntos',
+        'territorio',
+        'fraccion',
+        'registro',
+        'programa',
+      );
     // consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
