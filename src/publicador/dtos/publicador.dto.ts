@@ -2,6 +2,7 @@ export class CreatePublicadorDto {
   nombre: string;
   apellido1: string;
   grupo_id: number;
+  tareas?: number[];
 }
 
 export class UpdatePublicadorDto {
@@ -9,6 +10,7 @@ export class UpdatePublicadorDto {
   nombre?: string;
   apellido1?: string;
   grupo_id?: number;
+  tareas?: number[];
 }
 
 export class TablaPublicadorDto {
@@ -17,5 +19,5 @@ export class TablaPublicadorDto {
   apellido1: string;
   grupo_id?: number;
   grupo?: string;
-  es_conductor: boolean;
+  tareas?: number[];
 }

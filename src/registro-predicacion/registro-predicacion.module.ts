@@ -20,6 +20,8 @@ import { Periodo } from 'src/periodo/entities/periodo.entity';
 import { PeriodoService } from 'src/periodo/periodo.service';
 import { CongregacionService } from 'src/congregacion/congregacion.service';
 import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
+import { Tarea } from 'src/tareas/entities/tarea.entity';
+import { TareasService } from 'src/tareas/tareas.service';
 
 @Module({
   imports: [
@@ -34,6 +36,7 @@ import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
       Modalidad,
       Fraccion,
       Periodo,
+      Tarea,
     ]),
   ],
   controllers: [RegistroPredicacionController],
@@ -47,6 +50,7 @@ import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
     GrupoService,
     ModalidadService,
     PeriodoService,
+    TareasService,
   ],
 })
 export class RegistroPredicacionModule {}

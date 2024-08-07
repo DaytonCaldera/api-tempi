@@ -1,5 +1,5 @@
-import { Conductor } from 'src/conductor/entities/conductor.entity';
 import { ProgramaPredicacion } from 'src/programa_predicacion/entities/programa_predicacion.entity';
+import { Publicador } from 'src/publicador/entities/publicador.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -15,9 +15,9 @@ export class Modalidad {
   id: number;
   @Column()
   modalidad: string;
-  @ManyToMany(() => Conductor)
+  @ManyToMany(() => Publicador)
   @JoinTable()
-  conductor?: Conductor[];
+  conductor?: Publicador[];
   @OneToMany(() => ProgramaPredicacion, (programa) => programa.modalidad)
   programa?: ProgramaPredicacion[];
 }

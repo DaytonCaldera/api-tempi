@@ -17,11 +17,11 @@ import { ProgramaPredicacion } from 'src/programa_predicacion/entities/programa_
 export class Conductor {
   @PrimaryGeneratedColumn()
   id: number;
-  @OneToOne(() => Publicador, (publicador) => publicador.conductor, {
-    cascade: true, // or specify the cascade options that suit your use case
-  })
-  @JoinColumn()
-  publicador: Publicador;
+  // @OneToOne(() => Publicador, (publicador) => publicador.conductor, {
+  //   cascade: true, // or specify the cascade options that suit your use case
+  // })
+  // @JoinColumn()
+  // publicador: Publicador;
   @ManyToMany(() => Dia)
   @JoinTable()
   dias: Dia[];

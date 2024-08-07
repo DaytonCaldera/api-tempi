@@ -8,9 +8,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Conductor } from '../../conductor/entities/conductor.entity';
 import { Territorio } from '../../territorio/entities/territorio.entity';
 import { Periodo } from 'src/periodo/entities/periodo.entity';
+import { Publicador } from 'src/publicador/entities/publicador.entity';
 
 @Entity()
 export class RegistroPredicacion {
@@ -30,9 +30,9 @@ export class RegistroPredicacion {
   @ManyToOne(() => Periodo)
   @JoinColumn()
   periodo?: Periodo;
-  @ManyToMany(() => Conductor, (conductor) => conductor.registro, {
+  @ManyToMany(() => Publicador, (conductor) => conductor.registro, {
     eager: true,
   })
   @JoinTable()
-  asignados: Conductor[];
+  asignados: Publicador[];
 }

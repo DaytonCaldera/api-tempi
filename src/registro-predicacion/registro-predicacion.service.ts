@@ -12,8 +12,8 @@ import {
   UpdateRegistroPredicacionDto,
 } from 'src/registro-predicacion/dtos/registro_predicacion.dto';
 import { TerritorioService } from 'src/territorio/territorio.service';
-import { ConductorService } from 'src/conductor/conductor.service';
 import { PeriodoService } from 'src/periodo/periodo.service';
+import { PublicadorService } from 'src/publicador/publicador.service';
 
 @Injectable()
 export class RegistroPredicacionService {
@@ -21,7 +21,7 @@ export class RegistroPredicacionService {
     @InjectRepository(RegistroPredicacionEntity)
     private registroRepository: Repository<RegistroPredicacionEntity>,
     private territorioService: TerritorioService,
-    private conductorService: ConductorService,
+    private conductorService: PublicadorService,
     private periodoService: PeriodoService,
   ) {}
 
@@ -30,7 +30,7 @@ export class RegistroPredicacionService {
   }
   obtenerRegistroTabla(): Promise<RegistroPredicacion[]> {
     return this.registroRepository.find({
-      relations: ['territorio', 'asignados.publicador', 'periodo'],
+      relations: ['territorio', 'asignados', 'periodo'],
     });
   }
 

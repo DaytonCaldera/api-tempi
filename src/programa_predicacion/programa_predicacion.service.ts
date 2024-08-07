@@ -1,4 +1,4 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProgramaPredicacion as ProgramaPredicacionEntity } from 'src/programa_predicacion/entities/programa_predicacion.entity';
 import { Between, DeleteResult, IsNull, Not, Repository } from 'typeorm';
@@ -10,11 +10,11 @@ import {
   TablaProgramaDto,
   UpdateProgramaPredicacionDto,
 } from 'src/programa_predicacion/dtos/programa_predicacion.dto';
-import { ConductorService } from 'src/conductor/conductor.service';
 import { TerritorioService } from 'src/territorio/territorio.service';
 import { PuntosService } from 'src/puntos/puntos.service';
 import { FraccionService } from 'src/fraccion/fraccion.service';
 import { ModalidadService } from 'src/modalidad/modalidad.service';
+import { PublicadorService } from 'src/publicador/publicador.service';
 
 @Injectable()
 export class ProgramaPredicacionService {
@@ -22,7 +22,7 @@ export class ProgramaPredicacionService {
     @InjectRepository(ProgramaPredicacionEntity)
     private programaRepository: Repository<ProgramaPredicacionEntity>,
     private puntosService: PuntosService,
-    private conductorService: ConductorService,
+    private conductorService: PublicadorService,
     private territorioService: TerritorioService,
     private fraccionService: FraccionService,
     private modalidadService: ModalidadService,
@@ -44,8 +44,7 @@ export class ProgramaPredicacionService {
   ): Promise<TablaProgramaDto[]> {
     // 1. Retrieve registros based on fechasDto criteria
     const registros = await this.obtenerRegistros(fechasDto);
-    console.log(registros);
-    
+
     // 2. Check if generar flag is set and fechasDto has a range
     if (fechasDto?.generar && fechasDto?.hay_rango()) {
       // 2.1 Generate predicted program for the given date range
@@ -64,7 +63,7 @@ export class ProgramaPredicacionService {
   async obtenerRegistros(fechasDto?: BusquedaFechasDto): Promise<any[]> {
     const options = {
       relations: [
-        'conductor.publicador',
+        'conductor',
         'territorio',
         'fraccion.territorio',
         'punto',
@@ -78,12 +77,10 @@ export class ProgramaPredicacionService {
   }
 
   mapearRegistroATablaProgramaDto(registro: any): TablaProgramaDto {
-    console.log(registro.conductor);
-
     return {
       id: registro.id,
       fecha: registro.fecha,
-      conductor: registro.conductor.publicador.nombreCompleto,
+      conductor: registro.conductor.nombreCompleto,
       conductor_id: registro.conductor.id,
       punto: registro.punto.nombre,
       punto_id: registro.punto.id,

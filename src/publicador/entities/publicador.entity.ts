@@ -4,10 +4,16 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Grupo } from '../../grupo/entities/grupo.entity';
 import { Conductor } from '../../conductor/entities/conductor.entity';
 import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
+import { Tarea } from 'src/tareas/entities/tarea.entity';
+import { Dia } from 'src/dia/entities/dia.entity';
+import { Modalidad } from 'src/modalidad/entities/modalidad.entity';
+import { RegistroPredicacion } from 'src/registro-predicacion/entities/registro_predicacion.entity';
 
 @Entity()
 export class Publicador {
@@ -19,10 +25,10 @@ export class Publicador {
   apellido1: string;
   @ManyToOne(() => Grupo, (grupo) => grupo.publicadores)
   grupo: Grupo;
-  @OneToOne(() => Conductor, (conductor) => conductor.publicador, {
-    nullable: true,
-  })
-  conductor?: Conductor;
+
+  @ManyToMany(() => Tarea)
+  @JoinTable()
+  tareas?: Tarea[];
   // Add the new field here
   @Column({ nullable: true })
   nombreCompleto?: string;
@@ -38,4 +44,18 @@ export class Publicador {
 
   @ManyToOne(() => Congregacion)
   congregacion: Congregacion;
+
+  @ManyToMany(() => Dia)
+  @JoinTable()
+  dias?: Dia[];
+
+  @ManyToMany(() => Modalidad)
+  @JoinTable()
+  modalidades?: Modalidad[];
+
+  @ManyToMany(() => RegistroPredicacion, {
+    cascade: true, // or specify the cascade options that suit your use case
+  })
+  @JoinTable()
+  registro?: RegistroPredicacion[];
 }

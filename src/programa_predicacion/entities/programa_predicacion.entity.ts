@@ -11,6 +11,7 @@ import { Conductor } from '../../conductor/entities/conductor.entity';
 import { Territorio } from '../../territorio/entities/territorio.entity';
 import { Fraccion } from '../../fraccion/entities/fraccion.entity';
 import { Modalidad } from 'src/modalidad/entities/modalidad.entity';
+import { Publicador } from 'src/publicador/entities/publicador.entity';
 
 @Entity()
 export class ProgramaPredicacion {
@@ -20,8 +21,8 @@ export class ProgramaPredicacion {
   fecha: Date;
   @ManyToOne(() => Puntos)
   punto: Puntos;
-  @ManyToOne(() => Conductor)
-  conductor: Conductor;
+  @ManyToOne(() => Publicador)
+  conductor: Publicador;
   @ManyToMany(() => Territorio)
   @JoinTable()
   territorio?: Territorio[];
