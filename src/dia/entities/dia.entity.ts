@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
-import { Conductor } from '../../conductor/entities/conductor.entity';
+import { Publicador } from 'src/publicador/entities/publicador.entity';
 
 @Entity()
 export class Dia {
@@ -9,8 +9,8 @@ export class Dia {
   @Column()
   nombre: string;
 
-  @ManyToMany(() => Conductor, {
+  @ManyToMany(() => Publicador, {
     nullable: true,
   })
-  conductores: Conductor[];
+  conductores: Publicador[];
 }

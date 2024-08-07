@@ -1,5 +1,5 @@
-import { Conductor } from 'src/conductor/conductor.interface';
 import { Periodo } from 'src/periodo/periodo.interface';
+import { Publicador } from 'src/publicador/entities/publicador.entity';
 import { Territorio } from 'src/territorio/territorio.interface';
 
 export interface RegistroPredicacion {
@@ -9,6 +9,6 @@ export interface RegistroPredicacion {
   programado?: Date;
   final?: Date;
   dias?: number;
-  asignados: Conductor[];
+  asignados: Publicador[];
   periodo?: Periodo;
 }

@@ -21,6 +21,8 @@ import { Modalidad } from 'src/modalidad/entities/modalidad.entity';
 import { ModalidadService } from 'src/modalidad/modalidad.service';
 import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
 import { CongregacionService } from 'src/congregacion/congregacion.service';
+import { Tarea } from 'src/tareas/entities/tarea.entity';
+import { TareasService } from 'src/tareas/tareas.service';
 
 @Module({
   imports: [
@@ -35,6 +37,7 @@ import { CongregacionService } from 'src/congregacion/congregacion.service';
       Grupo,
       Fraccion,
       Modalidad,
+      Tarea,
     ]),
   ],
   controllers: [ProgramaPredicacionController],
@@ -49,6 +52,7 @@ import { CongregacionService } from 'src/congregacion/congregacion.service';
     GrupoService,
     FraccionService,
     ModalidadService,
+    TareasService,
   ],
 })
 export class ProgramaPredicacionModule {}

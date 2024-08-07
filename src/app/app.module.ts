@@ -32,8 +32,9 @@ import { Horario } from 'src/horario/entities/horario.entity';
 import { HorarioModule } from 'src/horario/horario.module';
 import { CongregacionModule } from 'src/congregacion/congregacion.module';
 import { Congregacion } from 'src/congregacion/entities/congregacion.entity';
-import { LoggerMiddleware } from './middleware/logger/logger.middleware';
 import { ClientIdMiddleware } from './middleware/clientid/clientid.middleware';
+import { Tarea } from 'src/tareas/entities/tarea.entity';
+import { TareasModule } from 'src/tareas/tareas.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { ClientIdMiddleware } from './middleware/clientid/clientid.middleware';
         Grupo,
         Publicador,
         Conductor,
+        Tarea,
         Dia,
         Puntos,
         Territorio,
@@ -75,6 +77,7 @@ import { ClientIdMiddleware } from './middleware/clientid/clientid.middleware';
     GrupoModule,
     PublicadorModule,
     ConductorModule,
+    TareasModule,
     DiaModule,
     PuntosModule,
     TerritorioModule,

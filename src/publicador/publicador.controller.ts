@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { PublicadorService } from './publicador.service';
 import { Publicador } from './publicador.interface';
@@ -17,10 +18,11 @@ import {
   TablaPublicadorDto,
   UpdatePublicadorDto,
 } from 'src/publicador/dtos/publicador.dto';
+import { ComboConductor } from 'src/conductor/dtos/conductor.dto';
 
 @Controller('publicador')
 export class PublicadorController {
-  constructor(private readonly publicadorService: PublicadorService) { }
+  constructor(private readonly publicadorService: PublicadorService) {}
   @Get()
   async getAll(): Promise<Publicador[]> {
     try {
@@ -32,10 +34,19 @@ export class PublicadorController {
       );
     }
   }
-
+  @Get('/conductor')
+  obtenerConductores(): Promise<Publicador[]> {
+    return this.publicadorService.buscarConductores();
+  }
   @Get('/tabla')
   async obtenerTablaPublicadores(): Promise<TablaPublicadorDto[]> {
     return this.publicadorService.obtenerTablaPublicadores();
+  }
+  @Get('/conductor/programa')
+  obtenerConductoresDisponibles(
+    @Query('fecha') fecha: string,
+  ): Promise<ComboConductor[]> {
+    return this.publicadorService.obtenerConductoresComboDisponibles(fecha);
   }
 
   @Get(':id')

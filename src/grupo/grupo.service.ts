@@ -15,32 +15,35 @@ import { UserProperties } from 'src/users/users.interface';
 
 @Injectable()
 export class GrupoService {
-  private queryBuilder: SelectQueryBuilder<GrupoEntity>;
   constructor(
     @InjectRepository(GrupoEntity)
     private grupoRepository: Repository<GrupoEntity>,
     @InjectRepository(PublicadorEntity)
     private publicadorRepository: Repository<PublicadorEntity>,
     private congregacionService: CongregacionService,
-  ) {
-    this.queryBuilder = this.grupoRepository.createQueryBuilder('grupo');
+  ) {}
+
+  private createQueryBuilder(): SelectQueryBuilder<GrupoEntity> {
+    return this.grupoRepository.createQueryBuilder('grupo');
   }
-  showMessage(message: string): string {
-    return message;
-  }
+
   async obtenerGrupos(): Promise<Grupo[]> {
-    return await this.queryBuilder
+    return await this.createQueryBuilder()
       .where('congregacionId = :cid', { cid: UserProperties.congregacion })
       .getMany();
   }
+
   async obtenerTablaGrupos(): Promise<TablaGrupoDto[]> {
-    const queryBuilder = await this.grupoRepository.createQueryBuilder('grupo');
+    const queryBuilder = await this.createQueryBuilder();
     queryBuilder.where('grupo.congregacionId = :cid', {
       cid: UserProperties?.congregacion,
     });
     queryBuilder.leftJoinAndSelect('grupo.encargado', 'encargado');
     queryBuilder.leftJoinAndSelect('grupo.auxiliar', 'auxiliar');
+    console.log(queryBuilder.getQueryAndParameters());
+
     const grupos = await queryBuilder.getMany();
+
     const gruposDtos = grupos.map(
       (g) =>
         ({
@@ -56,6 +59,7 @@ export class GrupoService {
             : null,
         }) as any,
     );
+
     return gruposDtos as TablaGrupoDto[];
   }
   async createGrupo(grupoDto: CreateGrupoDto): Promise<Grupo> {
@@ -85,8 +89,8 @@ export class GrupoService {
   }
 
   async buscarGrupo(id: number, withRelations: boolean = true): Promise<Grupo> {
-    const queryBuilder = await this.grupoRepository.createQueryBuilder('grupo');
-    queryBuilder.where('grupo.id = :id AND congregacionId = :cid', {
+    const queryBuilder = await this.createQueryBuilder();
+    queryBuilder.where('grupo.id = :id AND grupo.congregacionId = :cid', {
       id: id,
       cid: UserProperties.congregacion,
     });
